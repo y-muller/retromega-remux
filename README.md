@@ -43,7 +43,7 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 
 ## Credits
 - original theme and design: [DJFumberger](https://github.com/djfumberger/retromega)
-- improvements: plaidman
+- improvements: [plaidman](https://github.com/plaidman)
 - more improvements (or making it worse): RedSideOfTheMoon
 
 ## License

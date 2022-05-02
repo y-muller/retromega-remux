@@ -8,3 +8,4 @@
 # Changes
 ## 02/05/2022
 - optional list wraparound for games and collections
+- added swipe in game list to navigate collections

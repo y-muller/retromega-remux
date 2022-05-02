@@ -3,9 +3,23 @@ import QtQuick 2.15
 import '../footer' as Footer
 import '../header' as Header
 
-Item {
+Flickable {
     anchors.fill: parent;
 
+    flickableDirection: Flickable.HorizontalFlick
+    onFlickStarted: {
+        if (horizontalVelocity < 0) {
+            const updated = updateCollectionIndex(currentCollectionIndex - 1);
+            if (updated) { sounds.nav(); }
+        }
+        if (horizontalVelocity > 0) {
+            const updated = updateCollectionIndex(currentCollectionIndex + 1);
+            if (updated) { sounds.nav(); }
+        }
+    }
+    boundsMovement: Flickable.StopAtBounds
+    pressDelay: 0
+    
     function updateIndex(newIndex, moveAnimation=false) {
         if(moveAnimation)
             gameScroll.gamesListView.highlightMoveDuration = 225;
