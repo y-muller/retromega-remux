@@ -91,12 +91,6 @@ Item {
     }
 
     Keys.onPressed: {
-        if (fullDescriptionShowing) {
-            event.accepted = true;
-            hideFullDescription();
-            return;
-        }
-
         if (api.keys.isCancel(event)) {
             event.accepted = true;
             onCancelPressed();
@@ -115,6 +109,16 @@ Item {
         if (api.keys.isFilters(event)) {
             event.accepted = true;
             onFiltersPressed();
+        }
+        if (api.keys.isPageDown(event)) {
+            console.log("page down");
+            event.accepted = true;
+            allDetailsBlur.allDetails.fullDescription.scrollDown();
+        }
+        if (api.keys.isPageUp(event)) {
+            console.log("page up");
+            event.accepted = true;
+            allDetails.fullDescription.scrollUp();
         }
     }
 
@@ -147,7 +151,6 @@ Item {
             buttons: [
                 { title: 'Play', key: 'A', square: false, sigValue: 'accept' },
                 { title: 'Back', key: 'B', square: false, sigValue: 'cancel' },
-                { title: 'More', key: 'X', square: false, sigValue: 'details' },
                 { title: 'Favorite', key: 'Y', square: false, sigValue: 'filters' },
             ];
 
@@ -160,8 +163,8 @@ Item {
         }
     }
 
-    GameDescription {
-        id: fullDescription;
+/*    GameDescription {
+        id: fullDescription2;
 
         height: parent.height;
         width: parent.width;
@@ -178,4 +181,5 @@ Item {
             PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
         }
     }
+*/
 }

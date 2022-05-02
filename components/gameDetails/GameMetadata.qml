@@ -4,12 +4,6 @@ import QtGraphicalEffects 1.12
 Item {
     property double pixelSize;
 
-    property double actionButtonHeight: {
-        return Math.min(
-            actionButtons.height * 0.7,
-            root.height * 0.1,
-        );
-    }
 
     property string genreText: {
         if (currentGame === null) return '';
@@ -51,24 +45,27 @@ Item {
         return 'Played ' + time + ' days ago';
     }
 
-    property string releaseDateText: {
+/*    property string releaseDateText: {
         if (currentGame === null) return '';
         if (!currentGame.releaseYear) return '';
-        return 'Released ' + currentGame.releaseYear;
-    }
+        return currentGame.releaseYear;
+    }*/
 
     property string developedByText: {
         if (currentGame === null) return '';
 
+        let devtext = '';
         if (currentGame.developer) {
-            return 'Dev\'d by ' + currentGame.developer;
+            devtext = devtext + currentGame.developer;
         }
 
         if (currentGame.publisher) {
-            return 'Pub\'d by ' + currentGame.publisher;
+            if (devtext != '')
+                devtext = devtext + " / ";
+            devtext = devtext + currentGame.publisher;
         }
 
-        return '';
+        return devtext;
     }
 
     property var metadataSpacing: {
@@ -77,7 +74,7 @@ Item {
     }
 
     property var metadataText: {
-        const texts = [releaseDateText, genreText, developedByText, lastPlayedText];
+        const texts = [genreText, developedByText, lastPlayedText];
         return texts.filter(v => { return v !== null })
             .filter(v => { return v !== '' });
     }
@@ -93,7 +90,7 @@ Item {
         return currentGame.title;
     }
 
-    Text {
+/*    Text {
         id: title;
 
         width: parent.width;
@@ -114,6 +111,7 @@ Item {
             top: parent.top;
         }
     }
+*/
 
     Column {
         id: metadata;
@@ -122,7 +120,7 @@ Item {
         width: parent.width;
 
         anchors {
-            top: title.bottom;
+            top: parent.top;
             topMargin: 8;
         }
 
@@ -141,54 +139,6 @@ Item {
                     pixelSize: pixelSize * .75;
                     letterSpacing: -0.35;
                     bold: true;
-                }
-            }
-        }
-    }
-
-    Row {
-        id: actionButtons;
-
-        spacing: parent.width * .075;
-        width: parent.width;
-
-        anchors {
-            top: metadata.bottom;
-            topMargin: pixelSize;
-            bottom: parent.bottom;
-        }
-
-        ActionButton {
-            id: playButton;
-
-            glyph: glyphs.play;
-            width: parent.width / 2;
-            height: actionButtonHeight;
-            anchors.verticalCenter: parent.verticalCenter;
-
-            MouseArea {
-                anchors.fill: parent;
-
-                onClicked: {
-                    detailsButtonClicked('play');
-                }
-            }
-        }
-
-        ActionButton {
-            id: favoriteButton;
-
-            glyph: favoriteGlyph;
-            width: parent.width / 2;
-            height: actionButtonHeight;
-            anchors.verticalCenter: parent.verticalCenter;
-
-
-            MouseArea {
-                anchors.fill: parent;
-
-                onClicked: {
-                    detailsButtonClicked('favorite');
                 }
             }
         }
