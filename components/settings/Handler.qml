@@ -2,9 +2,9 @@ import QtQuick 2.15
 
 Item {
     property var keys: [
-        'bgMusic', 'navSounds', 'darkMode', 'twelveHour', 'smallFont',
-        'gameListVideo', 'gameDetailsVideo', 'quietVideo', 'quickVideo',
-        'dropShadow',
+        'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'twelveHour',
+        'smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
+        'quickVideo', 'dropShadow',
     ];
 
     function title(key) { return titles[key]; }
@@ -46,6 +46,7 @@ Item {
     }
 
     property var defaults: {
+        'listWrapAround': true,
         'bgMusic': true,
         'navSounds': true,
         'darkMode': false,
@@ -59,6 +60,7 @@ Item {
     }
 
     property var values: {
+        'listWrapAround': null,
         'bgMusic': null,
         'navSounds': null,
         'darkMode': null,
@@ -72,6 +74,7 @@ Item {
     }
 
     property var callbacks: {
+        'listWrapAround': [],
         'bgMusic': [],
         'navSounds': [],
         'darkMode': [],
@@ -85,6 +88,7 @@ Item {
     }
 
     property var titles: {
+        'listWrapAround': 'List Wrap Around',
         'bgMusic': 'Background Music',
         'navSounds': 'Navigation Sounds',
         'darkMode': 'Dark Theme',

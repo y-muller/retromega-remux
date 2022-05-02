@@ -6,8 +6,12 @@ import '../header' as Header
 Item {
     anchors.fill: parent;
 
-    function updateIndex(newIndex) {
+    function updateIndex(newIndex, moveAnimation=false) {
+        if(moveAnimation)
+            gameScroll.gamesListView.highlightMoveDuration = 225;
         gameScroll.gamesListView.currentIndex = newIndex;
+        if(moveAnimation)
+            gameScroll.gamesListView.highlightMoveDuration = 0;
     }
 
     Keys.onUpPressed: {

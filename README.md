@@ -1,7 +1,7 @@
 # Retro Mega Next
 [Pegasus](https://pegasus-frontend.org) theme for handheld devices.
 
-Adapted from [David Fumberger's RetroMega](https://github.com/djfumberger/retromega) theme. Completely rewritten from scratch to simplify code and allow me to add new features easier. I looked at each line of code, asking myself "what does it do?", "is it needed?", and "can it be done better?"
+Adapted from [David Fumberger's RetroMega](https://github.com/djfumberger/retromega) theme. Completely rewritten from scratch by [plaidman](https://github.com/plaidman) to simplify code and allow to add new features easier. I am now using it as a base to learn making themes for Pegasus.
 
 ## Installation and Scraping
 [Download](https://github.com/plaidman/retromega/archive/main.zip) and extract to your [theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes) under the folder retromega. You can then select the theme in the settings menu of Pegasus.
@@ -44,6 +44,7 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 ## Credits
 - original theme and design: [DJFumberger](https://github.com/djfumberger/retromega)
 - improvements: plaidman
+- more improvements (or making it worse): RedSideOfTheMoon
 
 ## License
 [![CC-BY-NC-SA](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)

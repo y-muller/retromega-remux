@@ -41,12 +41,22 @@ FocusScope {
         return Math.max(0, Math.min(val, max));
     }
 
+    function wrap(min, val, max) {
+        if(val < 0)
+            return max;
+        else if(val > max)
+            return 0;
+        return val;
+    }
+
     function updateCollectionIndex(newIndex, skipCollectionListUpdate = false) {
-        const clampedIndex = clamp(0, newIndex, allCollections.length - 1);
+        const boundedIndex = (settings.get('listWrapAround'))
+                           ? wrap(0, newIndex, allCollections.length - 1)
+                           : clamp(0, newIndex, allCollections.length - 1);
 
-        if (clampedIndex === currentCollectionIndex) return false;
+        if (boundedIndex === currentCollectionIndex) return false;
 
-        currentCollectionIndex = clampedIndex;
+        currentCollectionIndex = boundedIndex;
         currentCollection = allCollections[currentCollectionIndex];
 
         if (currentCollection.shortName === 'favorites') {
@@ -68,13 +78,19 @@ FocusScope {
     }
 
     function updateGameIndex(newIndex, forceUpdate = false) {
-        const clampedIndex = clamp(0, newIndex, currentGameList.count - 1);
+        //let moveAnimation = false;
+        const boundedIndex = (settings.get('listWrapAround'))
+                           ? wrap(0, newIndex, currentGameList.count - 1)
+                           : clamp(0, newIndex, currentGameList.count - 1);
 
-        if (!forceUpdate && clampedIndex === currentGameIndex) return false;
+        if (!forceUpdate && boundedIndex === currentGameIndex) return false;
 
-        currentGameIndex = clampedIndex;
+        const moveAnimation = ((Math.abs(currentGameIndex-boundedIndex) === currentGameList.count - 1) && (currentGameList.count > 2))
+                           ? true : false;
+
+        currentGameIndex = boundedIndex;
         currentGame = getMappedGame(currentGameIndex);
-        gameList.updateIndex(currentGameIndex);
+        gameList.updateIndex(currentGameIndex, moveAnimation);
 
         return true;
     }
