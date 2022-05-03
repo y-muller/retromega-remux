@@ -11,8 +11,7 @@ The theme uses `boxart2dfront` on the games list, and `screenshot` in the game d
 To setup Pegasus with scraped assets, there's a great written guide [available here](https://basvroegop.nl/pegasus) or a great video guide [available here](https://www.youtube.com/watch?v=fGWve7YYwGQ). You can also use [DragoonDorise's pegasus installer](https://www.pegasus-installer.com/) to scrape files on your device easier.
 
 ## Features
-- optimized for handheld devices with small screens
-- rewritten code from scratch
+- optimized for handheld devices with medium screens
 - controller support
 - sorting/filtering options
 - touch support
@@ -62,3 +61,5 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 ![dark mode 6:9](.meta/screenshots/dark169.png)
 ---
 ![game list 6:9](.meta/screenshots/light169.png)
+---
+![game details 6:9](.meta/screenshots/lightd169.png)

@@ -6,7 +6,7 @@ Item {
 
     function setFontScale(smallFont) {
         if (smallFont) {
-            fontScale = 0.5;
+            fontScale = 0.6;
         } else {
             fontScale = 1.0;
         }

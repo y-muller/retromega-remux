@@ -4,7 +4,6 @@ import QtGraphicalEffects 1.12
 import '../media' as Media
 
 Item {
-    property var blurSource;
 
     function resetFlickable() {
         flickable.contentY = -flickable.topMargin;
@@ -13,16 +12,31 @@ Item {
     function scrollUp() {
         flickable.contentY = Math.max(
             -flickable.topMargin,
-            flickable.contentY - fullDesc.font.pixelSize,
+            flickable.contentY - (flickable.height - flickable.bottomMargin) * .85,
         );
     }
 
     function scrollDown() {
         flickable.contentY = Math.min(
-            flickable.contentY + fullDesc.font.pixelSize,
-            flickable.contentHeight - root.height + flickable.bottomMargin,
+            flickable.contentY + (flickable.height - flickable.bottomMargin) * .85,
+            flickable.contentHeight - flickable.height,
         );
+        /*             flickable.contentY + fullDesc.font.pixelSize * 10, */
     }
+
+    Keys.onPressed: {
+        if (api.keys.isPageDown(event)) {
+            console.log("page down");
+            event.accepted = true;
+            fullDescription.scrollDown();
+        }
+        if (api.keys.isPageUp(event)) {
+            console.log("page up");
+            event.accepted = true;
+            fullDescription.scrollUp();
+        }
+    }
+
 
     // solves some kerning issues with period and commas
     property var descText: {
@@ -33,21 +47,6 @@ Item {
             .replace(/, {1,}/g, ',  ');
     }
 
-    // background to lighten or darken the blur effect, since it's translucent
-    Rectangle {
-        color: theme.current.bgColor;
-        anchors.fill: parent;
-    }
-
-    FastBlur {
-        width: root.width;
-        height: root.height;
-        radius: 80;
-        opacity: .4;
-        source: blurSource;
-        cached: true;
-    }
-
     Flickable {
         id: flickable;
 
@@ -56,10 +55,10 @@ Item {
         flickableDirection: Flickable.VerticalFlick;
         anchors.fill: parent;
         clip: true;
-        bottomMargin: 40;
-        leftMargin: 40;
-        rightMargin: 40;
-        topMargin: 40;
+        bottomMargin: 20;
+        leftMargin: 20;
+        rightMargin: 20;
+        topMargin: vpx(5);
 
         Behavior on contentY {
             PropertyAnimation { easing.type: Easing.OutCubic; duration: 150  }
@@ -68,7 +67,8 @@ Item {
         Text {
             id: fullDesc;
 
-            width: root.width - flickable.leftMargin - flickable.rightMargin;
+            //width: root.width - flickable.leftMargin - flickable.rightMargin;
+            width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
             text: descText;
             wrapMode: Text.WordWrap;
             lineHeight: 1.2;
@@ -76,9 +76,9 @@ Item {
             horizontalAlignment: Text.AlignJustify;
 
             font {
-                pixelSize: root.height * .045 * theme.fontScale;
+                pixelSize: root.height * .035 * theme.fontScale;
                 letterSpacing: -0.35;
-                bold: true;
+                bold: false;
             }
 
             MouseArea {
