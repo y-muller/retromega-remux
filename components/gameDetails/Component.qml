@@ -3,11 +3,11 @@ import QtGraphicalEffects 1.12
 
 import '../footer' as Footer
 import '../header' as Header
-import '../media' as Media
 
 Item {
     anchors.fill: parent;
-    property bool fullDescriptionShowing: false;
+
+    //property alias video: gameDetailsVideo;
 
     function onCancelPressed() {
         if (currentCollection.shortName === 'favorites' || onlyFavorites === true) {
@@ -46,7 +46,7 @@ Item {
         const updated = updateGameIndex(currentGameIndex - 1);
         if (updated) {
             sounds.nav();
-            video.switchVideo();
+            infoPane.video.switchVideo();
             fullDescription.resetFlickable();
         }
     }
@@ -56,7 +56,7 @@ Item {
         const updated = updateGameIndex(currentGameIndex + 1);
         if (updated) {
             sounds.nav();
-            video.switchVideo();
+            infoPane.video.switchVideo();
             fullDescription.resetFlickable();
         }
     }
@@ -90,8 +90,6 @@ Item {
             fullDescription.scrollUp();
         }
     }
-
-    property alias video: gameDetailsVideo;
 
     property var ratingText: {
         if (currentGame === null) return '';
@@ -142,12 +140,11 @@ Item {
     }
 
     Component.onCompleted: {
-        gameDetailsVideo.switchVideo();
+        infoPane.gameDetailsVideo.switchVideo();
         settings.addCallback('gameDetailsVideo', function () {
-            gameDetailsVideo.switchVideo();
+            infoPane.gameDetailsVideo.switchVideo();
         });
     }
-
 
     Rectangle {
         color: theme.current.bgColor;
@@ -157,201 +154,188 @@ Item {
             left: parent.left;
             right: parent.right;
         }
+    }
+    
+    /* Title and favourite */
+    Rectangle {
+        id: titleBlock
+        color: 'transparent';
+        height: root.height * .115 * theme.fontScale;
 
+        anchors {
+            left: parent.left;
+            right: parent.right;
+            top: parent.top;
+        }
+
+        // divider
         Rectangle {
-            id: titleBlock
-            color: 'transparent';
-            height: root.height * .115 * theme.fontScale;
-
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                top: parent.top;
-            }
-
-            // divider
-            Rectangle {
-                height: 1;
-                color: theme.current.dividerColor;
-
-                anchors {
-                    bottom: parent.bottom;
-                    left: parent.left;
-                    leftMargin: 22;
-                    right: parent.right;
-                    rightMargin: 22;
-                }
-            }
-        
-            Text {
-                id: title;
-
-                maximumLineCount: 1;
-                text: titleText;
-                color: theme.current.detailsColor;
-                elide: Text.ElideRight;
-
-                width: parent.width - 100;
-                anchors {
-                    left: parent.left;
-                    leftMargin: vpx(32);
-                    verticalCenter: parent.verticalCenter;
-                }
-
-                font {
-                    pixelSize: parent.height * .33;
-                    letterSpacing: -0.3;
-                    bold: true;
-                }
-            }
-
-            Text {
-                id: favourite;
-
-                text: favoriteGlyph;
-                color: theme.current.detailsColor;
-
-                font {
-                    family: glyphs.name;
-                    pixelSize: parent.height * .5;
-                }
-
-                anchors {
-                    right: parent.right;
-                    rightMargin: vpx(32);
-                    verticalCenter: parent.verticalCenter;
-                }
-
-                horizontalAlignment: Text.AlignRight;
-
-                MouseArea {
-                    anchors.fill: parent;
-
-                    onClicked: {
-                        detailsButtonClicked('favorite');
-                    }
-                }
-
-            }
-        }
-
-        GameMetadata {
-            id: gamedata;
-            
-            width: parent.width * .4 - vpx(50);
-            pixelSize: parent.height * .055;
-
-            anchors {
-                top: titleBlock.bottom;
-                topMargin: vpx(25);
-                /*bottom: detailsDivider.top;*/
-                bottomMargin: vpx(25);
-                left: parent.left;
-                leftMargin: vpx(25);
-            }
-        }
-
-    /*   Rectangle {
-            color: 'teal';
-            opacity: 0.3;
-
-            height: parent.height * .6;
-            anchors {
-                //top: titleBlock.bottom;
-                //topMargin: 10;
-                bottom: parent.bottom;
-                //bottomMargin: 2;
-                left: parent.left;
-                right: detailsDivider.left;
-            }
-        }
-    */
-
-        Media.GameImage {
-            id: gameDetailsScreenshot;
-
-            imageSource: imgSrc;
-
-            height: parent.height * .6;
-            anchors {
-                bottom: parent.bottom;
-                left: parent.left;
-                right: detailsDivider.left;
-            }
-
-        }
-
-        Media.GameVideo {
-            id: gameDetailsVideo;
-
-            height: parent.height * .6;
-            anchors {
-                bottom: parent.bottom;
-                left: parent.left;
-                right: detailsDivider.left;
-            }
-
-            settingKey: 'gameDetailsVideo';
-            validView: 'gameDetails';
-
-            onVideoToggled: {
-                gameDetailsScreenshot.videoPlaying = videoPlaying;
-            }
-        }
-
-        /* Vertical divider between info and description */
-        Rectangle {
-            id: detailsDivider;
-
+            height: 1;
             color: theme.current.dividerColor;
 
-            width: 1;
-            x: parent.width * .4;
             anchors {
-                top: titleBlock.bottom;
-                topMargin: 22;
-                bottom: parent.bottom
-                bottomMargin: 22;
-            }
-        }
-
-        /* Vertical pane with rating, players, date */
-        VerticalPane {
-            id: verticalPane;
-
-            width: vpx(50);
-            anchors {
-                top: titleBlock.bottom;
-                topMargin: vpx(10);
                 bottom: parent.bottom;
-                bottomMargin: vpx(10);
+                left: parent.left;
+                leftMargin: 22;
                 right: parent.right;
-                rightMargin: vpx(22);
+                rightMargin: 22;
+            }
+        }
+    
+        Text {
+            id: title;
+
+            maximumLineCount: 1;
+            text: titleText;
+            color: theme.current.detailsColor;
+            elide: Text.ElideRight;
+
+            width: parent.width - 100;
+            anchors {
+                left: parent.left;
+                leftMargin: vpx(32);
+                verticalCenter: parent.verticalCenter;
             }
 
-            Behavior on anchors.topMargin {
-                PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
+            font {
+                pixelSize: parent.height * .33;
+                letterSpacing: -0.3;
+                bold: true;
             }
         }
 
-        /* Description pane, scrollable */
-        GameDescription {
-            id: fullDescription;
+        Text {
+            id: favourite;
+
+            text: favoriteGlyph;
+            color: theme.current.detailsColor;
+
+            font {
+                family: glyphs.name;
+                pixelSize: parent.height * .5;
+            }
 
             anchors {
-                top: titleBlock.bottom;
-                topMargin: vpx(20);
-                left: detailsDivider.right;
-                leftMargin: vpx(20);
-                right: verticalPane.left;
-                rightMargin: vpx(20);
-                bottom: parent.bottom;
-                bottomMargin: vpx(20);
+                right: parent.right;
+                rightMargin: vpx(32);
+                verticalCenter: parent.verticalCenter;
             }
 
-            Behavior on anchors.topMargin {
-                PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
+            horizontalAlignment: Text.AlignRight;
+
+            MouseArea {
+                anchors.fill: parent;
+
+                onClicked: {
+                    detailsButtonClicked('favorite');
+                }
             }
+
+        }
+    }
+
+    /* Info pane with metadata and screenshot */
+    Flickable {
+        id: flickInfoPane;
+
+        flickableDirection: Flickable.VerticalFlick
+        onFlickStarted: {
+            if (verticalVelocity < 0) {
+                const updated = updateGameIndex(currentGameIndex - 1);
+                if (updated) {
+                    sounds.nav();
+                    infoPane.video.switchVideo();
+                    fullDescription.resetFlickable();
+                }
+            }
+            if (verticalVelocity > 0) {
+                const updated = updateGameIndex(currentGameIndex + 1);
+                if (updated) {
+                    sounds.nav();
+                    infoPane.video.switchVideo();
+                    fullDescription.resetFlickable();
+                }
+            }
+        }
+        boundsMovement: Flickable.StopAtBounds
+        pressDelay: 0
+
+        anchors {
+            top: titleBlock.bottom;
+            left: parent.left;
+            right: detailsDivider.left;
+            bottom: detailsFooter.top;
+        }
+    }
+    
+    InfoPane {
+        id: infoPane;
+
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: vpx(20);
+            left: parent.left;
+            leftMargin: vpx(20);
+            right: detailsDivider.left;
+            rightMargin: vpx(20);
+            bottom: detailsFooter.top;
+            bottomMargin: vpx(20);
+        }
+    }
+
+
+    /* Vertical divider between info and description */
+    Rectangle {
+        id: detailsDivider;
+
+        color: theme.current.dividerColor;
+
+        width: 1;
+        x: parent.width * .4;
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: 22;
+            bottom: detailsFooter.top
+            bottomMargin: 22;
+        }
+    }
+
+    /* Vertical pane with rating, players, date */
+    VerticalPane {
+        id: verticalPane;
+
+        width: vpx(50);
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: vpx(10);
+            bottom: detailsFooter.top;
+            bottomMargin: vpx(10);
+            right: parent.right;
+            rightMargin: vpx(22);
+        }
+
+        Behavior on anchors.topMargin {
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
+        }
+    }
+
+    /* Description pane, scrollable */
+    GameDescription {
+        id: fullDescription;
+
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: vpx(20);
+            left: detailsDivider.right;
+            leftMargin: vpx(20);
+            right: verticalPane.left;
+            rightMargin: vpx(20);
+            bottom: detailsFooter.top;
+            bottomMargin: vpx(20);
+        }
+
+        Behavior on anchors.topMargin {
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
         }
     }
 
