@@ -12,15 +12,16 @@ Item {
     function scrollUp() {
         flickable.contentY = Math.max(
             -flickable.topMargin,
-            flickable.contentY - fullDesc.font.pixelSize,
+            flickable.contentY - (flickable.height - flickable.bottomMargin) * .85,
         );
     }
 
     function scrollDown() {
         flickable.contentY = Math.min(
-            flickable.contentY + fullDesc.font.pixelSize,
-            flickable.contentHeight - root.height + flickable.bottomMargin,
+            flickable.contentY + (flickable.height - flickable.bottomMargin) * .85,
+            flickable.contentHeight - flickable.height,
         );
+        /*             flickable.contentY + fullDesc.font.pixelSize * 10, */
     }
 
     Keys.onPressed: {
@@ -57,7 +58,7 @@ Item {
         bottomMargin: 20;
         leftMargin: 20;
         rightMargin: 20;
-        topMargin: 20;
+        topMargin: vpx(5);
 
         Behavior on contentY {
             PropertyAnimation { easing.type: Easing.OutCubic; duration: 150  }
