@@ -61,3 +61,5 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 ![dark mode 6:9](.meta/screenshots/dark169.png)
 ---
 ![game list 6:9](.meta/screenshots/light169.png)
+---
+![game details 6:9](.meta/screenshots/lightd169.png)
