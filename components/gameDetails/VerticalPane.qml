@@ -42,7 +42,7 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: vertMain.height * .05;
+                pixelSize: vertMain.height * .05 * theme.fontScale;
                 bold: true;
             }
             
@@ -71,7 +71,7 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: vertMain.height * .05;
+                pixelSize: vertMain.height * .05 * theme.fontScale;
                 bold: true;
             }
             
@@ -102,7 +102,7 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: vertMain.height * .05;
+                pixelSize: vertMain.height * .05 * theme.fontScale;
                 bold: true;
             }
             

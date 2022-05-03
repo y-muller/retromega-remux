@@ -7,8 +7,6 @@ import '../header' as Header
 Item {
     anchors.fill: parent;
 
-    //property alias video: gameDetailsVideo;
-
     function onCancelPressed() {
         if (currentCollection.shortName === 'favorites' || onlyFavorites === true) {
             updateGameIndex(currentGameIndex, true);
@@ -46,7 +44,7 @@ Item {
         const updated = updateGameIndex(currentGameIndex - 1);
         if (updated) {
             sounds.nav();
-            infoPane.video.switchVideo();
+            infoPane.gameDetailsVideo.switchVideo();
             fullDescription.resetFlickable();
         }
     }
@@ -56,7 +54,7 @@ Item {
         const updated = updateGameIndex(currentGameIndex + 1);
         if (updated) {
             sounds.nav();
-            infoPane.video.switchVideo();
+            infoPane.gameDetailsVideo.switchVideo();
             fullDescription.resetFlickable();
         }
     }
@@ -244,7 +242,7 @@ Item {
                 const updated = updateGameIndex(currentGameIndex - 1);
                 if (updated) {
                     sounds.nav();
-                    infoPane.video.switchVideo();
+                    infoPane.gameDetailsVideo.switchVideo();
                     fullDescription.resetFlickable();
                 }
             }
@@ -252,7 +250,7 @@ Item {
                 const updated = updateGameIndex(currentGameIndex + 1);
                 if (updated) {
                     sounds.nav();
-                    infoPane.video.switchVideo();
+                    infoPane.gameDetailsVideo.switchVideo();
                     fullDescription.resetFlickable();
                 }
             }

@@ -5,7 +5,7 @@ import '../media' as Media
 
 Item {
 
-        property alias video: gameDetailsVideo;
+    property alias gameDetailsVideo: gameDetailsVideo;
 
     property string genreText: {
         if (currentGame === null) return '';
@@ -76,11 +76,11 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: parent.height * .04;
+                pixelSize: parent.height * .04 * theme.fontScale;
                 bold: true;
             }
             
-            height: parent.height * .04 + vpx(10);
+            height: parent.height * .04 + vpx(10) * theme.fontScale;
             anchors {
                 top: parent.top;
                 left: parent.left;
@@ -101,11 +101,11 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: parent.height * .05;
+                pixelSize: parent.height * .05 * theme.fontScale;
                 bold: true;
             }
 
-            height: parent.height * .05 + vpx(10);
+            height: parent.height * .05 + vpx(10) * theme.fontScale;
             anchors {
                 top: developedBy.bottom;
                 left: parent.left;
@@ -126,14 +126,14 @@ Item {
 
             font {
                 family: glyphs.name;
-                pixelSize: parent.height * .045;
+                pixelSize: parent.height * .045 * theme.fontScale;
                 bold: false;
             }
 
-            height: parent.height * .05 + vpx(10);
+            height: parent.height * .05 + vpx(10) * theme.fontScale;
             anchors {
                 top: genre.bottom;
-                topMargin: vpx(5);
+                topMargin: vpx(5) * theme.fontScale;
                 left: parent.left;
                 leftMargin: vpx(15);
                 right: parent.right;

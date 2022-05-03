@@ -8,5 +8,8 @@
 # Changes
 ## 03/05/2022
 - optional list wraparound for games and collections
-- added swipe in game list to navigate collections
+- added horizontal swipe in game list to navigate collections
 - redesigned game details to show more information in a single screen
+    (keypad scrolling of description is broken)
+- added vertical swipe in left side of game details page to navigate between games
+
