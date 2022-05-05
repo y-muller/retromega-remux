@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import SortFilterProxyModel 0.2
+import QtQml.Models 2.15
 
 import 'components/collectionList' as CollectionList
 import 'components/gameList' as GameList
@@ -113,6 +114,33 @@ FocusScope {
         theme.setFontScale(settings.get('smallFont'));
 
         sounds.start();
+        
+        /*
+        let challenges = [
+            { id: "rh_gotw", name: "Retro Bits", slots: 1, logo: "rh_gotw.png" },
+            { id: "rh_gotm", name: "Games of the Month", slots: 3, logo: "rh_gotm.png" },
+        ];
+        api.memory.set('challenges', challenges);
+        let challengeGames = [
+            { challenge: "rh_gotw", slot: 1, file: "/home/yann/ROMs/pcengine/Soldier Blade (U).pce" },
+            { challenge: "rh_gotm", slot: 1, file: "/home/yann/ROMs/snes/Super Ghouls 'N Ghosts (E).smc" },
+            { challenge: "rh_gotm", slot: 2, file: "/home/yann/ROMs/pcengine/OutRun (J).pce" },
+        ];
+        api.memory.set('challengeGames', challengeGames);
+        //let challengeGamesFromCollection = [];
+        for( var i = 0; i < api.allGames.rowCount(); i++ ) {
+            for( var j = 0; j < challengeGames.length; j++ ) {
+                if( api.allGames.get(i).files.get(0).path === challengeGames[j].file ) {
+                    console.log( "FOUND  " + challengeGames[j].file );
+                    //challengeGamesFromCollection[j] = api.allGames.get(i);
+                    //challengesModel.append( api.allGames.get(i) );                    
+                    console.log( "before: " + api.allGames.get(i).challenge );
+                    api.allGames.get(i).challenge = challengeGames[j].challenge;
+                    console.log( "after: " + api.allGames.get(i).challenge );
+                }
+            }
+        }
+         */
     }
 
     Component.onDestruction: {
@@ -128,14 +156,48 @@ FocusScope {
         settings.saveAll();
     }
 
+    property var challengesProcessed: {
+        console.log("processing challenges");
+        let challenges = [
+            { id: "rh_gotw", name: "Retro Bits", slots: 1, logo: "rh_gotw.png" },
+            { id: "rh_gotm", name: "Games of the Month", slots: 3, logo: "rh_gotm.png" },
+        ];
+        //api.memory.set('challenges', challenges);
+        let challengeGames = [
+            { challenge: "rh_gotw", slot: 1, file: "/home/yann/ROMs/pcengine/Soldier Blade (U).pce" },
+            { challenge: "rh_gotm", slot: 1, file: "/home/yann/ROMs/snes/Super Ghouls 'N Ghosts (E).smc" },
+            { challenge: "rh_gotm", slot: 2, file: "/home/yann/ROMs/pcengine/OutRun (J).pce" },
+        ];
+        //api.memory.set('challengeGames', challengeGames);
+        //let challengeGamesFromCollection = [];
+        for( var i = 0; i < api.allGames.rowCount(); i++ ) {
+            for( var j = 0; j < challengeGames.length; j++ ) {
+                if( api.allGames.get(i).files.get(0).path === challengeGames[j].file ) {
+                    console.log( "FOUND  " + challengeGames[j].file );
+                    //challengeGamesFromCollection[j] = api.allGames.get(i);
+                    //challengesModel.append( api.allGames.get(i) );                    
+                    console.log( "before: " + api.allGames.get(i).challenge );
+                    api.allGames.get(i).challenge = challengeGames[j].challenge;
+                    api.allGames.set(i, 'challenge', challengeGames[j].challenge );
+                    console.log( "after: " + api.allGames.get(i).challenge );
+                }
+            }
+        }
+        return api.allGames;
+    }
 
     // code to handle collection modification
     property var allCollections: {
+        console.log("allCollections");
+
+
+
         const collections = api.collections.toVarArray();
 
         collections.unshift({'name': 'Favorites', 'shortName': 'favorites', 'games': allFavorites});
         collections.unshift({'name': 'Last Played', 'shortName': 'recents', 'games': filterLastPlayed});
         collections.unshift({'name': 'All Games', 'shortName': 'allgames', 'games': api.allGames});
+        collections.unshift({'name': 'Challenges', 'shortName': 'challenges', 'games': allChallenges});
 
         return collections;
     };
@@ -145,9 +207,21 @@ FocusScope {
             return api.allGames.get(allFavorites.mapToSource(index));
         } else if (currentCollection.shortName === 'recents') {
             return api.allGames.get(filterLastPlayed.mapToSource(index));
+        } else if (currentCollection.shortName === 'challenges') {
+            return api.allGames.get(allChallenges.mapToSource(index));
         } else {
             return currentCollection.games.get(sortedCollection.mapToSource(index));
         }
+    }
+
+    SortFilterProxyModel {
+        id: allChallenges;
+
+        sourceModel: challengesProcessed;
+        filters: [
+            ValueFilter { roleName: 'challenge'; value: ''; inverted: true; }
+        ]
+        sorters: RoleSorter { roleName: sortKey; sortOrder: sortDir }
     }
 
     SortFilterProxyModel {
@@ -156,7 +230,6 @@ FocusScope {
         sourceModel: api.allGames;
         filters: [
             ValueFilter { roleName: 'favorite'; value: true; }
-            /* RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; } */
         ]
         sorters: RoleSorter { roleName: sortKey; sortOrder: sortDir }
     }
