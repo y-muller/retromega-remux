@@ -156,6 +156,18 @@ FocusScope {
         settings.saveAll();
     }
 
+    property var challenges: [
+        { id: "rh_gotw", name: "Retro Bits", slots: 1, logo: "rh_gotw.png" },
+        { id: "rh_gotm", name: "Games of the Month", slots: 3, logo: "rh_gotm.png" },
+    ];
+
+    property var challengeGames: [
+        { challenge: "rh_gotw", slot: 1, file: "/home/yann/ROMs/pcengine/Soldier Blade (U).pce" },
+        { challenge: "rh_gotm", slot: 1, file: "/home/yann/ROMs/snes/Super Ghouls 'N Ghosts (E).smc" },
+        { challenge: "rh_gotm", slot: 2, file: "/home/yann/ROMs/pcengine/OutRun (J).pce" },
+    ];
+
+/*
     property var challengesProcessed: {
         console.log("processing challenges");
         let challenges = [
@@ -178,20 +190,17 @@ FocusScope {
                     //challengesModel.append( api.allGames.get(i) );                    
                     console.log( "before: " + api.allGames.get(i).challenge );
                     api.allGames.get(i).challenge = challengeGames[j].challenge;
-                    api.allGames.set(i, 'challenge', challengeGames[j].challenge );
+                    //api.allGames.set(i, 'challenge', challengeGames[j].challenge );
                     console.log( "after: " + api.allGames.get(i).challenge );
                 }
             }
         }
         return api.allGames;
     }
+*/
 
     // code to handle collection modification
     property var allCollections: {
-        console.log("allCollections");
-
-
-
         const collections = api.collections.toVarArray();
 
         collections.unshift({'name': 'Favorites', 'shortName': 'favorites', 'games': allFavorites});
@@ -217,11 +226,19 @@ FocusScope {
     SortFilterProxyModel {
         id: allChallenges;
 
-        sourceModel: challengesProcessed;
+        sourceModel: api.allGames;
         filters: [
-            ValueFilter { roleName: 'challenge'; value: ''; inverted: true; }
+            ExpressionFilter {
+                expression: {
+                    for( var j = 0; j < challengeGames.length; j++ ) {
+                        if( files.get(0).path === challengeGames[j].file ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
         ]
-        sorters: RoleSorter { roleName: sortKey; sortOrder: sortDir }
     }
 
     SortFilterProxyModel {

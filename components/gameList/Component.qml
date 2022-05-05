@@ -32,7 +32,6 @@ Flickable {
         event.accepted = true;
         const updated = updateGameIndex(currentGameIndex - 1);
         if (updated) { sounds.nav(); }
-        console.log( "challenge: " + currentGame.challenge + "  - favourite: " + currentGame.favorite );
     }
 
     Keys.onDownPressed: {
