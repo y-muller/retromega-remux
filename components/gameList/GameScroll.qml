@@ -13,6 +13,78 @@ Item {
         return currentGame.assets.boxFront;
     }
 
+    property var ratingText: {
+        if (currentGame === null) return '';
+        if (currentGame.rating === 0) return '';
+
+        let stars = [];
+        const rating = Math.round(currentGame.rating * 500) / 100;
+
+        for (let i = 0; i < 5; i++) {
+            if (rating - i <= 0) {
+                stars.push(glyphs.emptyStar);
+            } else if (rating - i < 1) {
+                stars.push(glyphs.halfStar);
+            } else {
+                stars.push(glyphs.fullStar);
+            }
+        }
+
+        return stars.join(' ');
+    }
+
+    property string releaseDateText: {
+        if (currentGame === null) return '';
+        if (!currentGame.releaseYear) return '';
+        return currentGame.releaseYear;
+    }
+
+    property string playersText: {
+        if (currentGame === null) return '';
+        if (!currentGame.players) return '';
+        return currentGame.players + 'P';
+    }
+
+    property string genreText: {
+        if (currentGame === null) return '';
+
+        if (currentGame.genreList.length === 0) { return null; }
+
+        const genre = currentGame.genreList[0] ?? '';
+        const split = genre.split(',');
+
+        if (split[0].length === 0) { return null; }
+
+        return split[0];
+    }
+
+    property string lastPlayedText: {
+        if (currentGame === null) return '';
+
+        const lastPlayed = currentGame.lastPlayed.getTime();
+        if (isNaN(lastPlayed)) return 'Never played';
+
+        const now = new Date().getTime();
+
+        let time = Math.floor((now - lastPlayed) / 1000);
+        if (time < 60) {
+            return 'Played ' + time + ' seconds ago';
+        }
+
+        time = Math.floor(time / 60);
+        if (time < 60) {
+            return 'Played ' + time + ' minutes ago';
+        }
+
+        time = Math.floor(time / 60);
+        if (time < 24) {
+            return 'Played ' + time + ' hours ago';
+        }
+
+        time = Math.floor(time / 24);
+        return 'Played ' + time + ' days ago';
+    }
+
     Component.onCompleted: {
         gamesListView.currentIndex = currentGameIndex;
         gamesListView.positionViewAtIndex(currentGameIndex, ListView.Center);
@@ -79,26 +151,103 @@ Item {
         }
     }
 
-    Media.GameImage {
-        id: gameListBoxart;
+    /* Vertical pane with rating, players, date */
+    VerticalPane {
+        id: verticalPane;
 
-        width: parent.width / 2;
-        height: parent.height;
-        x: parent.width / 2;
-        imageSource: imgSrc;
+        width: vpx(40);
+        anchors {
+            top: parent.top;
+            topMargin: vpx(10);
+            bottom: parent.bottom;
+            bottomMargin: vpx(10);
+            right: parent.right;
+            rightMargin: vpx(22);
+        }
     }
 
-    Media.GameVideo {
-        id: gameListVideo;
-
-        width: parent.width / 2;
+    Rectangle {
+        color: 'transparent';
+        width: parent.width / 2 - vpx(62);
         height: parent.height;
         x: parent.width / 2;
-        settingKey: 'gameListVideo';
-        validView: 'gameList';
 
-        onVideoToggled: {
-            gameListBoxart.videoPlaying = videoPlaying;
+        Text {
+            id: genre;
+            text: genreText;
+
+            color: theme.current.detailsColor;
+            opacity: .7;
+            elide: Text.ElideRight
+            maximumLineCount: 1;
+            horizontalAlignment: Text.AlignHCenter;
+
+            font {
+                family: glyphs.name;
+                pixelSize: parent.height * .035 * theme.fontScale;
+                bold: true;
+            }
+
+            height: parent.height * .04;
+            anchors {
+                left: parent.left
+                right: parent.right;
+                bottom: lastPlayed.top;
+            }
+        }
+
+        Text {
+            id: lastPlayed;
+            text: lastPlayedText;
+
+            color: theme.current.detailsColor;
+            opacity: .5;
+            elide: Text.ElideRight
+            maximumLineCount: 1;
+            horizontalAlignment: Text.AlignHCenter;
+
+            font {
+                family: glyphs.name;
+                pixelSize: parent.height * .035 * theme.fontScale;
+                bold: false;
+            }
+
+            height: parent.height * .04 + vpx(10) * theme.fontScale;
+            anchors {
+                left: parent.left
+                right: parent.right;
+                bottom: parent.bottom;
+                bottomMargin: vpx(10)
+            }
+        }
+
+        Media.GameImage {
+            id: gameListBoxart;
+
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+                bottom: genre.top;
+            }
+            imageSource: imgSrc;
+        }
+
+        Media.GameVideo {
+            id: gameListVideo;
+
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+                bottom: genre.top;
+            }
+            settingKey: 'gameListVideo';
+            validView: 'gameList';
+
+            onVideoToggled: {
+                gameListBoxart.videoPlaying = videoPlaying;
+            }
         }
     }
 }
