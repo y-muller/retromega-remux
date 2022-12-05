@@ -44,6 +44,7 @@ Flickable {
         event.accepted = true;
         const updated = updateCollectionIndex(currentCollectionIndex - 1);
         if (updated) {
+            updateSortedCollection();
             sounds.nav();
             gameScroll.video.switchVideo();
         }
@@ -53,12 +54,15 @@ Flickable {
         event.accepted = true;
         const updated = updateCollectionIndex(currentCollectionIndex + 1);
         if (updated) {
+            updateSortedCollection();
             sounds.nav();
             gameScroll.video.switchVideo();
         }
     }
 
     function onAcceptPressed() {
+        if (currentGameList.count === 0) return;
+
         sounds.launch();
         currentGame.launch();
     }
@@ -123,7 +127,10 @@ Flickable {
             }
 
             const updated = updateGameIndex(newIndex);
-            if (updated) { sounds.nav(); }
+            if (updated) {
+                gameScroll.letter = currentGame.title[0].toUpperCase();
+                sounds.nav();
+            }
         }
 
         // R1
@@ -145,8 +152,18 @@ Flickable {
             }
 
             const updated = updateGameIndex(newIndex);
-            if (updated) { sounds.nav(); }
+            if (updated) {
+                gameScroll.letter = currentGame.title[0].toUpperCase();
+                sounds.nav();
+            }
         }
+    }
+
+    function onFavoritePressed() {
+        if (currentGameList.count === 0 || onlyFavorites) return;
+
+        currentGame.favorite = !currentGame.favorite;
+        sounds.nav();
     }
 
     // todo keep an eye on this issue https://github.com/mmatyas/pegasus-frontend/issues/781
@@ -159,6 +176,12 @@ Flickable {
             currentView = 'sorting';
             sounds.forward();
         }
+
+        //L2
+        if (api.keys.isPageUp(event)) {
+            event.accepted = true;
+            onFavoritePressed();
+        }
     }
 
     Rectangle {
@@ -168,6 +191,8 @@ Flickable {
 
     GameScroll {
         id: gameScroll;
+
+        letter: '';
 
         anchors {
             top: gameListHeader.bottom;
@@ -184,10 +209,11 @@ Flickable {
         total: currentGameList.count;
 
         buttons: [
-            { title: 'Play', key: 'A', square: false, sigValue: 'accept' },
-            { title: 'Back', key: 'B', square: false, sigValue: 'cancel' },
-            { title: 'Details', key: 'X', square: false, sigValue: 'details' },
-            { title: 'Random', key: 'Y', square: false, sigValue: 'filters' },
+            { title: 'Play', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
+            { title: 'Back', key: theme.buttonGuide.cancel, square: false, sigValue: 'cancel' },
+            { title: 'Details', key: theme.buttonGuide.details, square: false, sigValue: 'details' },
+            { title: 'Random', key: theme.buttonGuide.filters, square: false, sigValue: 'filters' },
+            { title: 'Favorite', visible: !onlyFavorites, key: theme.buttonGuide.pageUp, square: true, sigValue: 'favorite' }
         ];
 
         onFooterButtonClicked: {
@@ -195,6 +221,7 @@ Flickable {
             if (sigValue === 'cancel') onCancelPressed();
             if (sigValue === 'details') onDetailsPressed();
             if (sigValue === 'filters') onFiltersPressed();
+            if (sigValue === 'favorite') onFavoritePressed();
         }
     }
 

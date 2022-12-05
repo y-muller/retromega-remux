@@ -1,8 +1,6 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
-import '../media' as Media
-
 Item {
 
     function resetFlickable() {
@@ -47,6 +45,24 @@ Item {
             .replace(/, {1,}/g, ',  ');
     }
 
+    property var fullDescText: {
+        return descText + "\n\n" + filenames;
+    }
+
+    property var filenames: {
+        if (currentGame.files.count === 1) {
+            return 'file: ' + currentGame.files.get(0).path;
+        }
+
+        const files = [];
+        for (let i = 0; i < currentGame.files.count; i++) {
+            files.push(currentGame.files.get(i).path);
+        }
+
+
+        return "files:\n  - " + files.join("\n  - ");
+    }
+
     Flickable {
         id: flickable;
 
@@ -61,15 +77,14 @@ Item {
         topMargin: vpx(5);
 
         Behavior on contentY {
-            PropertyAnimation { easing.type: Easing.OutCubic; duration: 150  }
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 150; }
         }
 
         Text {
             id: fullDesc;
 
-            //width: root.width - flickable.leftMargin - flickable.rightMargin;
             width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
-            text: descText;
+            text: fullDescText;
             wrapMode: Text.WordWrap;
             lineHeight: 1.2;
             color: theme.current.detailsColor;
@@ -80,14 +95,14 @@ Item {
                 letterSpacing: -0.35;
                 bold: false;
             }
+        }
+    }
 
-            MouseArea {
-                anchors.fill: parent;
+    MouseArea {
+        anchors.fill: parent;
 
-                onClicked: {
-                    detailsButtonClicked('less');
-                }
-            }
+        onClicked: {
+            detailsButtonClicked('less');
         }
     }
 }

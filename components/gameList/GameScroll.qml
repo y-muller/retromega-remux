@@ -5,6 +5,9 @@ import '../media' as Media
 Item {
     property alias video: gameListVideo;
     property alias gamesListView: gamesListView;
+    property var sortingFont: global.fonts.sans;
+    property alias letter: skipLetter.letter;
+
     property double itemHeight: {
         return gamesListView.height * .12 * theme.fontScale;
     }
@@ -86,6 +89,29 @@ Item {
         return 'Played ' + time + ' days ago';
     }
 
+    property var sortingText: {
+        if (sortKey === 'release') {
+            sortingFont = global.fonts.sans;
+            return gameData.releaseDateText;
+        }
+
+        if (sortKey === 'rating') {
+            sortingFont = glyphs.name;
+            return gameData.ratingText;
+        }
+
+        sortingFont = global.fonts.sans;
+        return gameData.lastPlayedText;
+    }
+
+    property string noGameText: {
+        if (nameFilter != '') {
+            return 'No Games With "' + nameFilter + '"';
+        }
+
+        return 'No Games';
+    }
+
     Component.onCompleted: {
         gamesListView.currentIndex = currentGameIndex;
         gamesListView.positionViewAtIndex(currentGameIndex, ListView.Center);
@@ -97,13 +123,12 @@ Item {
 
     Text {
         visible: currentGameList.count === 0;
-        text: 'No Games';
+        text: noGameText;
         anchors.centerIn: parent;
         color: theme.current.blurTextColor;
         opacity: 0.5;
 
         font {
-            family: globalFonts.sans;
             pixelSize: parent.height * .065;
             letterSpacing: -0.3;
             bold: true;
@@ -132,7 +157,7 @@ Item {
         }
 
         highlight: Rectangle {
-            color: collectionData.getColor(currentCollection.shortName);
+            color: collectionData.getColor(currentShortName);
             opacity: theme.current.bgOpacity;
             radius: 8;
             width: gamesListView.width;
@@ -153,6 +178,15 @@ Item {
     }
 
     /* Vertical pane with rating, players, date */
+    SkipLetter {
+        id: skipLetter;
+
+        anchors {
+            verticalCenter: gamesListView.verticalCenter;
+            horizontalCenter: gamesListView.horizontalCenter;
+        }
+    }
+
     VerticalPane {
         id: verticalPane;
 

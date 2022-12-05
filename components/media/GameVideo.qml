@@ -11,7 +11,7 @@ Item {
         videoPlayer.stop();
         videoPlayer.source = '';
 
-        music.loud();
+        music.volumeCheck();
 
         videoPlayerTimer.restart();
         videoToggled(false);
@@ -51,6 +51,8 @@ Item {
             }
         });
 
+        music.registerVideo(videoPlayer);
+
         quickVideoCallback(settings.get('quickVideo'));
         settings.addCallback('quickVideo', quickVideoCallback);
 
@@ -80,16 +82,16 @@ Item {
         interval: 2000;
         repeat: false;
         onTriggered: {
+            if (currentGame === null) return;
             if (currentGame.assets.video === '') return;
             if (settings.get(settingKey) === false) return;
             if (currentView !== validView) return;
 
             videoToggled(true);
 
-            if (videoPlayer.volume > 0) music.quiet();
-
             videoPlayer.source = currentGame.assets.video;
             videoPlayer.play();
+            music.volumeCheck();
         }
     }
 

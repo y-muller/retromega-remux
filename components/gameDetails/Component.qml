@@ -2,14 +2,15 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 import '../footer' as Footer
-import '../header' as Header
 
 Item {
     anchors.fill: parent;
+    property bool favoritesChanged: false;
 
     function onCancelPressed() {
-        if (currentCollection.shortName === 'favorites' || onlyFavorites === true) {
+        if (favoritesChanged === true) {
             updateGameIndex(currentGameIndex, true);
+            favoritesChanged = false;
         }
 
         currentView = 'gameList';
@@ -23,6 +24,7 @@ Item {
 
     function onFiltersPressed() {
         currentGame.favorite = !currentGame.favorite;
+        favoritesChanged = true;
         sounds.nav();
     }
 
@@ -224,6 +226,7 @@ Item {
             MouseArea {
                 anchors.fill: parent;
 
+
                 onClicked: {
                     detailsButtonClicked('favorite');
                 }
@@ -313,7 +316,7 @@ Item {
         }
 
         Behavior on anchors.topMargin {
-            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200; }
         }
     }
 
@@ -343,9 +346,9 @@ Item {
         total: 0;
 
         buttons: [
-            { title: 'Play', key: 'A', square: false, sigValue: 'accept' },
-            { title: 'Back', key: 'B', square: false, sigValue: 'cancel' },
-            { title: 'Favorite', key: 'Y', square: false, sigValue: 'filters' },
+            { title: 'Play', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
+            { title: 'Back', key: theme.buttonGuide.cancel, square: false, sigValue: 'cancel' },
+            { title: 'Favorite', key: theme.buttonGuide.filters, square: false, sigValue: 'filters' },
         ];
 
         onFooterButtonClicked: {
