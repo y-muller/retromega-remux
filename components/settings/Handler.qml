@@ -2,8 +2,8 @@ import QtQuick 2.15
 
 Item {
     property var keys: [
-        'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'buttonGuide', 'twelveHour',
-        'smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
+        'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'buttonsXBox', 'buttonsPlaystation',
+        'twelveHour','smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
         'quickVideo', 'dropShadow', 'resetNameFilter', 'attractTitle',
         'favoritesOnTop', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites'
     ];
@@ -51,7 +51,8 @@ Item {
         'bgMusic': true,
         'navSounds': true,
         'darkMode': false,
-        'buttonGuide': false,
+        'buttonsXBox': false,
+        'buttonsPlaystation' : false,
         'twelveHour': false,
         'smallFont': false,
         'gameListVideo': true,
@@ -73,7 +74,8 @@ Item {
         'bgMusic': null,
         'navSounds': null,
         'darkMode': null,
-        'buttonGuide': null,
+        'buttonsXBox': null,
+        'buttonsPlaystation' : null,
         'twelveHour': null,
         'smallFont': null,
         'gameListVideo': null,
@@ -95,7 +97,8 @@ Item {
         'bgMusic': [],
         'navSounds': [],
         'darkMode': [],
-        'buttonGuide': [],
+        'buttonsXBox': [],
+        'buttonsPlaystation': [],
         'twelveHour': [],
         'smallFont': [],
         'gameListVideo': [],
@@ -117,7 +120,8 @@ Item {
         'bgMusic': 'Background Music',
         'navSounds': 'Navigation Sounds',
         'darkMode': 'Dark Theme',
-        'buttonGuide': 'XBox Button Guide',
+        'buttonsXBox': 'XBox Buttons',
+        'buttonsPlaystation': 'Playstation Buttons',
         'twelveHour': 'Twelve Hour Clock',
         'smallFont': 'Use Smaller Font',
         'gameListVideo': 'Video On Game List',
