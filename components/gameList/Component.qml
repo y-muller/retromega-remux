@@ -10,19 +10,19 @@ Flickable {
     onFlickStarted: {
         if (horizontalVelocity < 0) {
             const updated = updateCollectionIndex(currentCollectionIndex - 1);
-        if (updated) {
-            updateSortedCollection();
-            sounds.nav();
-            gameScroll.video.switchVideo();
-        }
+            if (updated) {
+                updateSortedCollection();
+                sounds.nav();
+                gameScroll.video.switchVideo();
+            }
         }
         if (horizontalVelocity > 0) {
             const updated = updateCollectionIndex(currentCollectionIndex + 1);
-        if (updated) {
-            updateSortedCollection();
-            sounds.nav();
-            gameScroll.video.switchVideo();
-        }
+            if (updated) {
+                updateSortedCollection();
+                sounds.nav();
+                gameScroll.video.switchVideo();
+            }
         }
     }
     boundsMovement: Flickable.StopAtBounds

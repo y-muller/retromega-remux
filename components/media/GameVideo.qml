@@ -103,8 +103,8 @@ Item {
         source: currentGame.assets.video;
         autoPlay: false;
         loops: MediaPlayer.Infinite;
-        width: parent.width * .75;
-        height: parent.height * .75;
+        width: parent.width;
+        height: parent.height;
         anchors.centerIn: parent;
         fillMode: VideoOutput.PreserveAspectFit;
     }

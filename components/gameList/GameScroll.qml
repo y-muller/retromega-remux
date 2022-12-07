@@ -12,9 +12,14 @@ Item {
         return gamesListView.height * .12 * theme.fontScale;
     }
 
-    property string imgSrc: {
+    property string imgBoxFront: {
         if (currentGame === null) return '';
         return currentGame.assets.boxFront;
+    }
+
+    property string imgScreenshot: {
+        if (currentGame === null) return '';
+        return currentGame.assets.screenshot;
     }
 
     property var ratingText: {
@@ -213,7 +218,7 @@ Item {
 
             color: theme.current.detailsColor;
             opacity: .7;
-            elide: Text.ElideRight
+            elide: Text.ElideRight;
             maximumLineCount: 1;
             horizontalAlignment: Text.AlignHCenter;
 
@@ -225,8 +230,9 @@ Item {
 
             height: parent.height * .04;
             anchors {
-                left: parent.left
+                left: gameListBoxart.right
                 right: parent.right;
+                rightMargin: vpx(10);
                 bottom: lastPlayed.top;
             }
         }
@@ -237,7 +243,7 @@ Item {
 
             color: theme.current.detailsColor;
             opacity: .5;
-            elide: Text.ElideRight
+            elide: Text.ElideRight;
             maximumLineCount: 1;
             horizontalAlignment: Text.AlignHCenter;
 
@@ -249,40 +255,88 @@ Item {
 
             height: parent.height * .04 + vpx(10) * theme.fontScale;
             anchors {
-                left: parent.left
+                left: gameListBoxart.right;
                 right: parent.right;
+                rightMargin: vpx(10);
                 bottom: parent.bottom;
-                bottomMargin: vpx(10)
+                bottomMargin: gameListBoxart.height * .3;
             }
         }
 
-        Media.GameImage {
-            id: gameListBoxart;
-
+        /*Rectangle {
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
             anchors {
                 top: parent.top;
+                topMargin: vpx(20);
                 left: parent.left;
+                leftMargin: vpx(70);
                 right: parent.right;
-                bottom: genre.top;
+                rightMargin: vpx(10);
             }
-            imageSource: imgSrc;
+            color: 'transparent'; border.color: 'magenta';
+        }*/
+
+        Media.GameImage {
+            id: gameListScreenshot;
+
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
+            anchors {
+                top: parent.top;
+                topMargin: vpx(20);
+                left: parent.left;
+                leftMargin: vpx(70);
+                right: parent.right;
+                rightMargin: vpx(10);
+            }
+            imageSource: imgScreenshot;
         }
 
         Media.GameVideo {
             id: gameListVideo;
 
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
             anchors {
                 top: parent.top;
+                topMargin: vpx(20);
                 left: parent.left;
+                leftMargin: vpx(70);
                 right: parent.right;
-                bottom: genre.top;
+                rightMargin: vpx(10);
             }
             settingKey: 'gameListVideo';
             validView: 'gameList';
 
             onVideoToggled: {
-                gameListBoxart.videoPlaying = videoPlaying;
+                gameListScreenshot.videoPlaying = videoPlaying;
             }
         }
+
+        /*Rectangle {
+            height: parent.height * .4;
+            width: parent.width * .4;
+            anchors {
+                left: parent.left;
+                leftMargin: vpx(50);
+                bottom: parent.bottom;
+                bottomMargin: vpx(20);
+            }
+            color: 'transparent'; border.color: 'magenta';
+        }*/
+
+        Media.GameImage {
+            id: gameListBoxart;
+
+            height: parent.height * .4;
+            width: parent.width * .4;
+            anchors {
+                left: parent.left;
+                leftMargin: vpx(50);
+                bottom: parent.bottom;
+                bottomMargin: vpx(20);
+            }
+            imageSource: imgBoxFront;
+            alignment: Image.AlignLeft;
+        }
+
     }
 }

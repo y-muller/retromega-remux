@@ -6,6 +6,7 @@ Item {
     property bool videoPlaying: false;
     property string imageSource: '';
     property bool delayedImage: false;
+    property var alignment: Image.AlignHCenter;
 
     visible: {
         if (failed) return false;
@@ -63,9 +64,9 @@ Item {
         visible: false;
         fillMode: Image.PreserveAspectFit;
         cache: false;
-        width: parent.width * .75;
-        height: parent.height * .75;
-        anchors.centerIn: parent;
+        width: parent.width;
+        height: parent.height;
+        horizontalAlignment: alignment;
     }
 
     Image {
@@ -76,8 +77,8 @@ Item {
         fillMode: Image.PreserveAspectFit;
         asynchronous: true;
         cache: false;
-        width: parent.width * .75;
-        height: parent.height * .75;
+        width: parent.width;
+        height: parent.height;
         anchors.centerIn: parent;
 
         onStatusChanged: {
@@ -106,7 +107,7 @@ Item {
         Rectangle {
             color: 'white';
             radius: 10;
-            anchors.centerIn: parent;
+            anchors.centerIn: (alignment == Image.AlignHCenter) ? parent : null;
             width: boxartBuffer.paintedWidth;
             height: boxartBuffer.paintedHeight;
         }
