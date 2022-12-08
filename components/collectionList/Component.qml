@@ -23,6 +23,8 @@ Item {
     }
 
     function onAcceptPressed() {
+        currentGame = null;
+        updateSortedCollection();
         currentView = 'gameList';
         sounds.forward();
     }
@@ -30,6 +32,11 @@ Item {
     function onSettingsPressed() {
         previousView = currentView;
         currentView = 'settings';
+        sounds.forward();
+    }
+
+    function onAttractPressed() {
+        currentView = 'attract';
         sounds.forward();
     }
 
@@ -43,9 +50,29 @@ Item {
             event.accepted = true;
             onSettingsPressed();
         }
+
+        // L1
+        if (api.keys.isPrevPage(event)) {
+            event.accepted = true;
+            const updated = updateCollectionIndex(0);
+            if (updated) { sounds.nav(); }
+        }
+
+        // R1
+        if (api.keys.isNextPage(event)) {
+            event.accepted = true;
+            const updated = updateCollectionIndex(allCollections.length - 1);
+            if (updated) { sounds.nav(); }
+        }
     }
 
     Keys.onReleased: {
+        // L2
+        if (api.keys.isPageUp(event)) {
+            event.accepted = true;
+            onAttractPressed();
+        }
+
         // R2
         if (api.keys.isPageDown(event)) {
             event.accepted = true;
@@ -72,14 +99,16 @@ Item {
         total: allCollections.length;
 
         buttons: [
-            { title: 'Select', key: 'A', square: false, sigValue: 'accept' },
-            { title: 'Menu', key: 'B', square: false, sigValue: null },
-            { title: 'Settings', key: 'X', square: false, sigValue: 'settings' },
+            { title: 'Select', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
+            { title: 'Menu', key: theme.buttonGuide.cancel, square: false, sigValue: null },
+            { title: 'Settings', key: theme.buttonGuide.details, square: false, sigValue: 'settings' },
+            { title: 'Attract', key: theme.buttonGuide.pageUp, square: true, sigValue: 'attract' },
         ];
 
         onFooterButtonClicked: {
             if (sigValue === 'accept') onAcceptPressed();
             if (sigValue === 'settings') onSettingsPressed();
+            if (sigValue === 'attract') onAttractPressed();
         }
     }
 

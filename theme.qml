@@ -8,6 +8,7 @@ import 'components/settings' as Settings
 import 'components/resources' as Resources
 import 'components/themes' as Themes
 import 'components/sorting' as Sorting
+import 'components/attract' as Attract
 
 FocusScope {
     id: root;
@@ -18,14 +19,17 @@ FocusScope {
 
     property int currentCollectionIndex: -1;
     property var currentCollection;
+    property string currentShortName;
     property var currentGameList;
     property int currentGameIndex: -1;
     property var currentGame;
 
     property bool onlyFavorites: false;
+    property bool onlyMultiplayer: false;
+    property bool favoritesOnTop: false;
     property string sortKey: 'sortBy';
     property var sortDir: Qt.AscendingOrder;
-    /* property string nameFilter: ''; */
+    property string nameFilter: '';
 
     function addCurrentViewCallback(callback) {
         currentViewCallbacks.push(callback);
@@ -49,6 +53,19 @@ FocusScope {
         return val;
     }
 
+    function updateSortedCollection() {
+        if (currentShortName === 'favorites') {
+            currentGameList = allFavorites;
+        } else if (currentShortName === 'recents') {
+            currentGameList = filterLastPlayed;
+        } else {
+            currentGameList = sortedCollection;
+        }
+
+        currentCollection = allCollections[currentCollectionIndex];
+        updateGameIndex(0, true);
+    }
+
     function updateCollectionIndex(newIndex, skipCollectionListUpdate = false) {
         const boundedIndex = (settings.get('listWrapAround'))
                            ? wrap(0, newIndex, allCollections.length - 1)
@@ -57,17 +74,7 @@ FocusScope {
         if (boundedIndex === currentCollectionIndex) return false;
 
         currentCollectionIndex = boundedIndex;
-        currentCollection = allCollections[currentCollectionIndex];
-
-        if (currentCollection.shortName === 'favorites') {
-            currentGameList = allFavorites;
-        } else if (currentCollection.shortName === 'recents') {
-            currentGameList = filterLastPlayed;
-        } else {
-            currentGameList = sortedCollection;
-        }
-
-        updateGameIndex(0, true);
+        currentShortName = allCollections[currentCollectionIndex].shortName;
 
         // this prevents a circular update loop if we're updating from dragging the collection list
         if (!skipCollectionListUpdate) {
@@ -101,16 +108,28 @@ FocusScope {
         currentView = api.memory.get('currentView') ?? 'collectionList';
 
         onlyFavorites = api.memory.get('onlyFavorites') ?? false;
+        onlyMultiplayer = api.memory.get('onlyMultiplayer') ?? false;
         sortKey = api.memory.get('sortKey') ?? 'sortBy';
         sortDir = api.memory.get('sortDir') ?? Qt.AscendingOrder;
-        /* nameFilter = api.memory.get('nameFilter') ?? ''; */
+        nameFilter = api.memory.get('nameFilter') ?? '';
+
+        favoritesOnTop = settings.get('favoritesOnTop');
+        settings.addCallback('favoritesOnTop', function (enabled) {
+            favoritesOnTop = enabled;
+        });
 
         updateCollectionIndex(api.memory.get('currentCollectionIndex') ?? -1);
+        updateSortedCollection();
         updateGameIndex(api.memory.get('currentGameIndex') ?? -1, true);
 
-        // this is done in here to prevent a quick flash of light mode
+        // this is done in here to prevent a quick flash of default themes
         theme.setDarkMode(settings.get('darkMode'));
+        theme.setButtonGuide(settings.get('buttonGuide'));
         theme.setFontScale(settings.get('smallFont'));
+
+        if (settings.get('resetNameFilter')) {
+            nameFilter = '';
+        }
 
         sounds.start();
     }
@@ -121,9 +140,10 @@ FocusScope {
         api.memory.set('currentGameIndex', currentGameIndex);
 
         api.memory.set('onlyFavorites', onlyFavorites);
+        api.memory.set('onlyMultiplayer', onlyMultiplayer);
         api.memory.set('sortKey', sortKey);
         api.memory.set('sortDir', sortDir);
-        /* api.memory.set('nameFilter', nameFilter); */
+        api.memory.set('nameFilter', nameFilter);
 
         settings.saveAll();
     }
@@ -133,9 +153,17 @@ FocusScope {
     property var allCollections: {
         const collections = api.collections.toVarArray();
 
-        collections.unshift({'name': 'Favorites', 'shortName': 'favorites', 'games': allFavorites});
-        collections.unshift({'name': 'Last Played', 'shortName': 'recents', 'games': filterLastPlayed});
-        collections.unshift({'name': 'All Games', 'shortName': 'allgames', 'games': api.allGames});
+        if (settings.get('showFavorites')) {
+            collections.unshift({'name': 'Favorites', 'shortName': 'favorites', 'games': allFavorites});
+        }
+
+        if (settings.get('showRecents')) {
+            collections.unshift({'name': 'Last Played', 'shortName': 'recents', 'games': filterLastPlayed});
+        }
+
+        if (settings.get('showAllGames')) {
+            collections.unshift({'name': 'All Games', 'shortName': 'allgames', 'games': api.allGames});
+        }
 
         return collections;
     };
@@ -155,8 +183,9 @@ FocusScope {
 
         sourceModel: api.allGames;
         filters: [
-            ValueFilter { roleName: 'favorite'; value: true; }
-            /* RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; } */
+            ValueFilter { roleName: 'favorite'; value: true; },
+            ExpressionFilter { enabled: onlyMultiplayer; expression: { return players > 1; } },
+            RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; }
         ]
         sorters: RoleSorter { roleName: sortKey; sortOrder: sortDir }
     }
@@ -167,29 +196,37 @@ FocusScope {
         sourceModel: api.allGames;
         filters: [
             ValueFilter { roleName: 'favorite'; value: true; enabled: onlyFavorites; },
-            /* RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; }, */
+            ExpressionFilter { enabled: onlyMultiplayer; expression: { return players > 1; } },
+            RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; },
             ExpressionFilter {
                 expression: {
                     const lastPlayedTime = lastPlayed.getTime();
                     if (isNaN(lastPlayedTime)) return false;
 
                     const curTime = new Date().getTime();
-                    const lastMonth = 1000 * 60 * 60 * 24 * 31;
+                    const lastMonth = 1000 * 60 * 60 * 24 * 31; // ms in 31 days
                     return (curTime - lastPlayedTime < lastMonth)
                 }
             }
         ]
-        sorters: RoleSorter { roleName: 'lastPlayed'; sortOrder: Qt.DescendingOrder; }
+        sorters: [
+            RoleSorter { roleName: 'favorite'; sortOrder: Qt.DescendingOrder; enabled: favoritesOnTop; },
+            RoleSorter { roleName: 'lastPlayed'; sortOrder: Qt.DescendingOrder; }
+        ]
     }
 
     SortFilterProxyModel {
         id: sortedCollection;
 
         sourceModel: currentCollection.games;
-        sorters: RoleSorter { roleName: sortKey; sortOrder: sortDir }
+        sorters: [
+            RoleSorter { roleName: 'favorite'; sortOrder: Qt.DescendingOrder; enabled: favoritesOnTop; },
+            RoleSorter { roleName: sortKey; sortOrder: sortDir }
+        ]
         filters: [
-            ValueFilter { roleName: 'favorite'; value: true; enabled: onlyFavorites; }
-            /* RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; } */
+            ValueFilter { roleName: 'favorite'; value: true; enabled: onlyFavorites; },
+            ExpressionFilter { enabled: onlyMultiplayer; expression: { return players > 1; } },
+            RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; }
         ]
     }
 
@@ -198,6 +235,7 @@ FocusScope {
     Settings.Handler { id: settings; }
     Themes.Handler { id: theme; }
     Resources.CollectionData { id: collectionData; }
+    Resources.GameData { id: gameData; }
     Resources.Sounds { id: sounds; }
     Resources.Music { id: music; }
     Sorting.Handler { id: sorting; }
@@ -216,10 +254,16 @@ FocusScope {
         property string fullStar: '\ue803';
         property string halfStar: '\uf123';
         property string emptyStar: '\ue804';
+        property string search: '\ue806';
+        property string cancel: '\ue807';
 
         source: "assets/images/fontello.ttf";
     }
 
+    FontLoader {
+        id: unicode;
+        source: "assets/images/Symbola_hint.ttf";
+    }
 
     // ui components
     CollectionList.Component {
@@ -247,11 +291,20 @@ FocusScope {
     }
 
     Sorting.Component {
+        id: sortingComponent;
+
         visible: currentView === 'sorting';
         focus: currentView === 'sorting';
     }
 
-    /* Text { id: debug; x: 20; y: 20; width: 20; height: 20; text: 'debug'; } */
+    Attract.Component {
+        id: attractComponent;
+
+        visible: currentView === 'attract';
+        focus: currentView === 'attract';
+    }
+
+    /* Text { id: debug; x: 20; y: 20; width: 20; height: 20; text: 'debug'; color: 'magenta'; } */
     /* Rectangle { width: 640; height: 480; color: 'transparent'; border.color: 'magenta'; } */
     /* Rectangle { width: 1280; height: 720; color: 'transparent'; border.color: 'magenta'; } */
 }

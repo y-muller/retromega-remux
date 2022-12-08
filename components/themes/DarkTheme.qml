@@ -10,13 +10,18 @@ Item {
     property string dividerColor: '#20ffffff';
     property string focusTextColor: '#cccccc';
     property string blurTextColor: '#555555';
-    property string dropShadowColor: '#40ffffff';
+    property string dropShadowColor: '#a0000000';
 
     // details
     property string detailsColor: '#999999';
 
     // settings
     property string highlightColor: '#333333';
+
+    // name filter modal
+    property string textInputBackgroundColor: '#222222';
+    property string textInputBorderColor: '#444444';
+    property string textInputPlaceholderColor: '#444444';
 
     // header
     property string defaultHeaderNameColor: '#aaaaaa';

@@ -5,13 +5,21 @@ import '../media' as Media
 Item {
     property alias video: gameListVideo;
     property alias gamesListView: gamesListView;
+    property var sortingFont: global.fonts.sans;
+    property alias letter: skipLetter.letter;
+
     property double itemHeight: {
         return gamesListView.height * .12 * theme.fontScale;
     }
 
-    property string imgSrc: {
+    property string imgBoxFront: {
         if (currentGame === null) return '';
         return currentGame.assets.boxFront;
+    }
+
+    property string imgScreenshot: {
+        if (currentGame === null) return '';
+        return currentGame.assets.screenshot;
     }
 
     property var ratingText: {
@@ -86,6 +94,29 @@ Item {
         return 'Played ' + time + ' days ago';
     }
 
+    property var sortingText: {
+        if (sortKey === 'release') {
+            sortingFont = global.fonts.sans;
+            return gameData.releaseDateText;
+        }
+
+        if (sortKey === 'rating') {
+            sortingFont = glyphs.name;
+            return gameData.ratingText;
+        }
+
+        sortingFont = global.fonts.sans;
+        return gameData.lastPlayedText;
+    }
+
+    property string noGameText: {
+        if (nameFilter != '') {
+            return 'No Games With "' + nameFilter + '"';
+        }
+
+        return 'No Games';
+    }
+
     Component.onCompleted: {
         gamesListView.currentIndex = currentGameIndex;
         gamesListView.positionViewAtIndex(currentGameIndex, ListView.Center);
@@ -97,13 +128,12 @@ Item {
 
     Text {
         visible: currentGameList.count === 0;
-        text: 'No Games';
+        text: noGameText;
         anchors.centerIn: parent;
         color: theme.current.blurTextColor;
         opacity: 0.5;
 
         font {
-            family: globalFonts.sans;
             pixelSize: parent.height * .065;
             letterSpacing: -0.3;
             bold: true;
@@ -132,7 +162,7 @@ Item {
         }
 
         highlight: Rectangle {
-            color: collectionData.getColor(currentCollection.shortName);
+            color: collectionData.getColor(currentShortName);
             opacity: theme.current.bgOpacity;
             radius: 8;
             width: gamesListView.width;
@@ -153,6 +183,15 @@ Item {
     }
 
     /* Vertical pane with rating, players, date */
+    SkipLetter {
+        id: skipLetter;
+
+        anchors {
+            verticalCenter: gamesListView.verticalCenter;
+            horizontalCenter: gamesListView.horizontalCenter;
+        }
+    }
+
     VerticalPane {
         id: verticalPane;
 
@@ -179,8 +218,9 @@ Item {
 
             color: theme.current.detailsColor;
             opacity: .7;
-            elide: Text.ElideRight
-            maximumLineCount: 1;
+            elide: Text.ElideRight;
+            maximumLineCount: 2;
+            wrapMode: Text.WordWrap;
             horizontalAlignment: Text.AlignHCenter;
 
             font {
@@ -191,8 +231,9 @@ Item {
 
             height: parent.height * .04;
             anchors {
-                left: parent.left
+                left: gameListBoxart.right
                 right: parent.right;
+                rightMargin: vpx(10);
                 bottom: lastPlayed.top;
             }
         }
@@ -203,7 +244,7 @@ Item {
 
             color: theme.current.detailsColor;
             opacity: .5;
-            elide: Text.ElideRight
+            elide: Text.ElideRight;
             maximumLineCount: 1;
             horizontalAlignment: Text.AlignHCenter;
 
@@ -215,40 +256,88 @@ Item {
 
             height: parent.height * .04 + vpx(10) * theme.fontScale;
             anchors {
-                left: parent.left
+                left: gameListBoxart.right;
                 right: parent.right;
+                rightMargin: vpx(10);
                 bottom: parent.bottom;
-                bottomMargin: vpx(10)
+                bottomMargin: gameListBoxart.height * .3;
             }
         }
 
-        Media.GameImage {
-            id: gameListBoxart;
-
+        /*Rectangle {
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
             anchors {
                 top: parent.top;
+                topMargin: vpx(20);
                 left: parent.left;
+                leftMargin: vpx(70);
                 right: parent.right;
-                bottom: genre.top;
+                rightMargin: vpx(10);
             }
-            imageSource: imgSrc;
+            color: 'transparent'; border.color: 'magenta';
+        }*/
+
+        Media.GameImage {
+            id: gameListScreenshot;
+
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
+            anchors {
+                top: parent.top;
+                topMargin: vpx(20);
+                left: parent.left;
+                leftMargin: vpx(70);
+                right: parent.right;
+                rightMargin: vpx(10);
+            }
+            imageSource: imgScreenshot;
         }
 
         Media.GameVideo {
             id: gameListVideo;
 
+            height: parent.height - gameListBoxart.height * .95 - vpx(10);
             anchors {
                 top: parent.top;
+                topMargin: vpx(20);
                 left: parent.left;
+                leftMargin: vpx(70);
                 right: parent.right;
-                bottom: genre.top;
+                rightMargin: vpx(10);
             }
             settingKey: 'gameListVideo';
             validView: 'gameList';
 
             onVideoToggled: {
-                gameListBoxart.videoPlaying = videoPlaying;
+                gameListScreenshot.videoPlaying = videoPlaying;
             }
         }
+
+        /*Rectangle {
+            height: parent.height * .4;
+            width: parent.width * .4;
+            anchors {
+                left: parent.left;
+                leftMargin: vpx(50);
+                bottom: parent.bottom;
+                bottomMargin: vpx(20);
+            }
+            color: 'transparent'; border.color: 'magenta';
+        }*/
+
+        Media.GameImage {
+            id: gameListBoxart;
+
+            height: parent.height * .4;
+            width: parent.width * .4;
+            anchors {
+                left: parent.left;
+                leftMargin: vpx(50);
+                bottom: parent.bottom;
+                bottomMargin: vpx(20);
+            }
+            imageSource: imgBoxFront;
+            alignment: Image.AlignLeft;
+        }
+
     }
 }

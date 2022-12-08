@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.12
+import SortFilterProxyModel 0.2
 
 Item {
     MouseArea {
@@ -55,7 +56,7 @@ Item {
     }
 
     Text {
-        text: modelData.games.count + ' games';
+        text: filteredGamesCollection.count + ' games';
         color: theme.current.titleColor;
         opacity: 0.7;
 
@@ -71,6 +72,17 @@ Item {
             letterSpacing: -0.3;
             bold: true;
         }
+    }
+
+    SortFilterProxyModel {
+        id: filteredGamesCollection;
+
+        sourceModel: allCollections[collectionListView.currentIndex].games;
+        filters: [
+            ValueFilter { roleName: 'favorite'; value: true; enabled: onlyFavorites; },
+            ExpressionFilter { enabled: onlyMultiplayer; expression: { return players > 1; } },
+            RegExpFilter { roleName: 'title'; pattern: nameFilter; caseSensitivity: Qt.CaseInsensitive; enabled: nameFilter !== ''; }
+        ]
     }
 
     Text {
@@ -96,45 +108,29 @@ Item {
         id: device;
 
         source: '../../assets/images/devices/' + collectionData.getImage(modelData.shortName) + '.png';
-        width: root.width * .59;
-        height: root.height * .78;
+        width: root.width * .50;
+        height: root.height * .65;
         fillMode: Image.PreserveAspectFit;
-        horizontalAlignment: Image.AlignRight;
+        horizontalAlignment: Image.AlignHCenter;
         asynchronous: true;
+        smooth: true;
+        visible: true;
 
         anchors {
             verticalCenter: parent.verticalCenter;
             verticalCenterOffset: 10;
             right: parent.right;
-            rightMargin: 0;
-        }
-
-        states: [
-            State {
-                name: 'active';
-                when: collectionListView.currentIndex === index;
-                PropertyChanges { target: device; anchors.rightMargin: -60.0; }
-            },
-
-            State {
-                name: 'inactiveRight';
-                when: collectionListView.currentIndex < index;
-                PropertyChanges { target: device; anchors.rightMargin: -160.0; }
-            },
-
-            State {
-                name: 'inactiveLeft';
-                when: collectionListView.currentIndex > index;
-                PropertyChanges { target: device; anchors.rightMargin: 40.0; }
-            }
-        ]
-
-        transitions: Transition {
-            NumberAnimation {
-                properties: 'anchors.rightMargin';
-                easing.type: Easing.InOutCubic;
-                duration: 225;
-            }
+            rightMargin: root.width * .02;
         }
     }
+
+    // DropShadow {
+    //     source: device;
+    //     verticalOffset: 10;
+    //     color: '#30000000';
+    //     radius: 20;
+    //     samples: 41;
+    //     cached: true;
+    //     anchors.fill: device;
+    // }
 }

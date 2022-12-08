@@ -18,12 +18,15 @@ Item {
     MouseArea {
         anchors.fill: parent;
         onClicked: {
+            let muteSound = false;
+
             if (settingsListView.currentIndex !== index) {
                 settingsListView.currentIndex = index;
                 sounds.nav();
+                muteSound = true;
             }
 
-            onAcceptPressed();
+            onAcceptPressed(muteSound);
         }
     }
 
@@ -59,7 +62,6 @@ Item {
         height: parent.height;
 
         font {
-            family: globalFonts.sans;
             pixelSize: parent.height * .43;
             letterSpacing: -0.3;
             bold: true;

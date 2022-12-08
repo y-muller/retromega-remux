@@ -2,9 +2,10 @@ import QtQuick 2.15
 
 Item {
     property var keys: [
-        'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'twelveHour',
-        'smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
-        'quickVideo', 'dropShadow',
+        'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'buttonsXBox', 'buttonsPlaystation',
+        'twelveHour','smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
+        'quickVideo', 'dropShadow', 'resetNameFilter', 'attractTitle',
+        'favoritesOnTop', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites'
     ];
 
     function title(key) { return titles[key]; }
@@ -50,6 +51,8 @@ Item {
         'bgMusic': true,
         'navSounds': true,
         'darkMode': false,
+        'buttonsXBox': false,
+        'buttonsPlaystation' : false,
         'twelveHour': false,
         'smallFont': false,
         'gameListVideo': true,
@@ -57,6 +60,13 @@ Item {
         'quietVideo': false,
         'quickVideo': false,
         'dropShadow': true,
+        'resetNameFilter': false,
+        'attractTitle': true,
+        'favoritesOnTop': false,
+        'delayedImage': false,
+        'showAllGames': true,
+        'showRecents': true,
+        'showFavorites': true,
     }
 
     property var values: {
@@ -64,6 +74,8 @@ Item {
         'bgMusic': null,
         'navSounds': null,
         'darkMode': null,
+        'buttonsXBox': null,
+        'buttonsPlaystation' : null,
         'twelveHour': null,
         'smallFont': null,
         'gameListVideo': null,
@@ -71,6 +83,13 @@ Item {
         'quietVideo': null,
         'quickVideo': null,
         'dropShadow': null,
+        'resetNameFilter': null,
+        'attractTitle': null,
+        'favoritesOnTop': null,
+        'delayedImage': null,
+        'showAllGames': null,
+        'showRecents': null,
+        'showFavorites': null,
     }
 
     property var callbacks: {
@@ -78,6 +97,8 @@ Item {
         'bgMusic': [],
         'navSounds': [],
         'darkMode': [],
+        'buttonsXBox': [],
+        'buttonsPlaystation': [],
         'twelveHour': [],
         'smallFont': [],
         'gameListVideo': [],
@@ -85,6 +106,13 @@ Item {
         'quietVideo': [],
         'quickVideo': [],
         'dropShadow': [],
+        'resetNameFilter': [],
+        'attractTitle': [],
+        'favoritesOnTop': [],
+        'delayedImage': [],
+        'showAllGames': [],
+        'showRecents': [],
+        'showFavorites': [],
     }
 
     property var titles: {
@@ -92,6 +120,8 @@ Item {
         'bgMusic': 'Background Music',
         'navSounds': 'Navigation Sounds',
         'darkMode': 'Dark Theme',
+        'buttonsXBox': 'XBox Buttons',
+        'buttonsPlaystation': 'Playstation Buttons',
         'twelveHour': 'Twelve Hour Clock',
         'smallFont': 'Use Smaller Font',
         'gameListVideo': 'Video On Game List',
@@ -99,5 +129,12 @@ Item {
         'quietVideo': 'Silent Videos',
         'quickVideo': 'Shorter Video Delay',
         'dropShadow': 'Enable Video/Image Shadow',
+        'resetNameFilter': 'Clear Name Filter On Reload',
+        'attractTitle': 'Game Title On Attract Mode',
+        'favoritesOnTop': 'Favorites On Top',
+        'delayedImage': 'Delayed Images',
+        'showAllGames': 'Show All Games Collection',
+        'showRecents': 'Show Last Played Collection',
+        'showFavorites': 'Show Favorites Collection',
     }
 }

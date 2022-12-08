@@ -5,6 +5,8 @@ Item {
     property bool failed: true;
     property bool videoPlaying: false;
     property string imageSource: '';
+    property bool delayedImage: false;
+    property var alignment: Image.AlignHCenter;
 
     visible: {
         if (failed) return false;
@@ -13,6 +15,28 @@ Item {
         if (imageSource.length === 0) return false;
 
         return true;
+    }
+
+    Timer {
+        id: imageDelayTimer;
+
+        interval: 75;
+        repeat: false;
+        onTriggered: {
+            boxartImage.source = imageSource;
+        }
+    }
+
+    onImageSourceChanged: {
+        if (delayedImage) {
+            imageDelayTimer.restart();
+        } else {
+            boxartImage.source = imageSource;
+        }
+    }
+
+    function delayedImageCallback(enabled) {
+        delayedImage = enabled;
     }
 
     function dropShadowCallback(enabled) {
@@ -26,6 +50,9 @@ Item {
     }
 
     Component.onCompleted: {
+        delayedImageCallback(settings.get('delayedImage'));
+        settings.addCallback('delayedImage', delayedImageCallback);
+
         dropShadowCallback(settings.get('dropShadow'));
         settings.addCallback('dropShadow', dropShadowCallback);
     }
@@ -37,9 +64,10 @@ Item {
         visible: false;
         fillMode: Image.PreserveAspectFit;
         cache: false;
-        width: parent.width * .75;
-        height: parent.height * .75;
-        anchors.centerIn: parent;
+        width: parent.width;
+        height: parent.height;
+        horizontalAlignment: alignment;
+        verticalAlignment: (alignment == Image.AlignHCenter) ? Image.AlignVCenter : Image.AlignTop;
     }
 
     Image {
@@ -48,11 +76,10 @@ Item {
         // invisible - boxartBuffer is shown and updated to prevent flickering
         visible: false;
         fillMode: Image.PreserveAspectFit;
-        source: imageSource;
         asynchronous: true;
         cache: false;
-        width: parent.width * .75;
-        height: parent.height * .75;
+        width: parent.width;
+        height: parent.height;
         anchors.centerIn: parent;
 
         onStatusChanged: {
@@ -81,7 +108,11 @@ Item {
         Rectangle {
             color: 'white';
             radius: 10;
-            anchors.centerIn: parent;
+            anchors.centerIn: (alignment == Image.AlignHCenter) ? parent : undefined;
+            anchors.right: (alignment == Image.AlignRight) ? parent.right : undefined;
+            anchors.left: (alignment == Image.AlignLeft) ? parent.left : undefined;
+            //anchors.top: parent.top;
+            //anchors.bottom: parent.bottom;
             width: boxartBuffer.paintedWidth;
             height: boxartBuffer.paintedHeight;
         }

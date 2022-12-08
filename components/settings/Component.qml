@@ -28,11 +28,11 @@ Item {
         }
     }
 
-    function onAcceptPressed() {
+    function onAcceptPressed(muteSound = false) {
         const currentIndex = settingsScroll.settingsListView.currentIndex;
         const currentKey = settings.keys[currentIndex];
         settings.toggle(currentKey);
-        sounds.nav();
+        if (!muteSound) sounds.nav();
     }
 
     function onCancelPressed() {
@@ -79,8 +79,8 @@ Item {
         total: 0;
 
         buttons: [
-            { title: 'Toggle', key: 'A', square: false, sigValue: 'accept' },
-            { title: 'Back', key: 'B', square: false, sigValue: 'cancel' },
+            { title: 'Toggle', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
+            { title: 'Back', key: theme.buttonGuide.cancel, square: false, sigValue: 'cancel' },
         ];
 
         onFooterButtonClicked: {

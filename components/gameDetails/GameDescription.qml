@@ -1,8 +1,6 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
-import '../media' as Media
-
 Item {
 
     function resetFlickable() {
@@ -47,11 +45,29 @@ Item {
             .replace(/, {1,}/g, ',  ');
     }
 
+    property var fullDescText: {
+        return descText + "\n";
+    }
+
+    property var filenames: {
+        if (currentGame.files.count === 1) {
+            return 'file: ' + currentGame.files.get(0).path;
+        }
+
+        const files = [];
+        for (let i = 0; i < currentGame.files.count; i++) {
+            files.push(currentGame.files.get(i).path);
+        }
+
+
+        return "files:\n  - " + files.join("\n  - ");
+    }
+
     Flickable {
         id: flickable;
 
         contentWidth: fullDesc.width;
-        contentHeight: fullDesc.height;
+        contentHeight: fullDesc.height + fileDetails.height;
         flickableDirection: Flickable.VerticalFlick;
         anchors.fill: parent;
         clip: true;
@@ -61,31 +77,47 @@ Item {
         topMargin: vpx(5);
 
         Behavior on contentY {
-            PropertyAnimation { easing.type: Easing.OutCubic; duration: 150  }
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 150; }
         }
 
-        Text {
-            id: fullDesc;
+        Rectangle {
+            Text {
+                id: fullDesc;
 
-            //width: root.width - flickable.leftMargin - flickable.rightMargin;
-            width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
-            text: descText;
-            wrapMode: Text.WordWrap;
-            lineHeight: 1.2;
-            color: theme.current.detailsColor;
-            horizontalAlignment: Text.AlignJustify;
+                width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
+                text: fullDescText;
+                wrapMode: Text.WordWrap;
+                lineHeight: 1.2;
+                color: theme.current.detailsColor;
+                horizontalAlignment: Text.AlignJustify;
 
-            font {
-                pixelSize: root.height * .035 * theme.fontScale;
-                letterSpacing: -0.35;
-                bold: false;
+                font {
+                    pixelSize: root.height * .03 * theme.fontScale;
+                    letterSpacing: -0.35;
+                    bold: false;
+                }
             }
 
-            MouseArea {
-                anchors.fill: parent;
+            Text {
+                id: fileDetails;
 
-                onClicked: {
-                    detailsButtonClicked('less');
+                width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
+                text: filenames;
+                wrapMode: Text.WordWrap;
+                lineHeight: 1.2;
+                color: theme.current.detailsColor;
+                horizontalAlignment: Text.AlignJustify;
+
+                font {
+                    pixelSize: root.height * .024 * theme.fontScale;
+                    letterSpacing: -0.35;
+                    bold: false;
+                }
+                
+                anchors {
+                    top: fullDesc.bottom;
+                    left: parent.left;
+                    right: parent.right;
                 }
             }
         }

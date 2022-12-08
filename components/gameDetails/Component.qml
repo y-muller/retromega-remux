@@ -2,14 +2,16 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 import '../footer' as Footer
-import '../header' as Header
+import '../media' as Media
 
 Item {
     anchors.fill: parent;
+    property bool favoritesChanged: false;
 
     function onCancelPressed() {
-        if (currentCollection.shortName === 'favorites' || onlyFavorites === true) {
+        if (favoritesChanged === true) {
             updateGameIndex(currentGameIndex, true);
+            favoritesChanged = false;
         }
 
         currentView = 'gameList';
@@ -23,6 +25,7 @@ Item {
 
     function onFiltersPressed() {
         currentGame.favorite = !currentGame.favorite;
+        favoritesChanged = true;
         sounds.nav();
     }
 
@@ -109,9 +112,19 @@ Item {
         return stars.join(' ');
     }
 
-    property string imgSrc: {
+    property string imgScreenshot: {
         if (currentGame === null) return '';
         return currentGame.assets.screenshot;
+    }
+
+    property string imgBoxFront: {
+        if (currentGame === null) return '';
+        return currentGame.assets.boxFront;
+    }
+
+    property string imgLogo: {
+        if (currentGame === null) return '';
+        return currentGame.assets.logo;
     }
 
     property string favoriteGlyph: {
@@ -224,6 +237,7 @@ Item {
             MouseArea {
                 anchors.fill: parent;
 
+
                 onClicked: {
                     detailsButtonClicked('favorite');
                 }
@@ -286,9 +300,9 @@ Item {
     Rectangle {
         id: detailsDivider;
 
-        color: theme.current.dividerColor;
-
-        width: 1;
+        //color: theme.current.dividerColor;
+        color: 'transparent';
+        width: 10;
         x: parent.width * .4;
         anchors {
             top: titleBlock.bottom;
@@ -313,7 +327,43 @@ Item {
         }
 
         Behavior on anchors.topMargin {
-            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200  }
+            PropertyAnimation { easing.type: Easing.OutCubic; duration: 200; }
+        }
+    }
+
+    Item {
+        id: gameGfx;
+        height: verticalPane.height * .3;
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: vpx(20);
+            left: detailsDivider.right;
+            leftMargin: vpx(40);
+            right: verticalPane.left;
+            rightMargin: vpx(40);
+        }
+
+        Media.GameImage {
+            id: gameDetailsLogo;
+            imageSource: imgLogo;
+            width: parent.width * .55 - vpx(80);
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+                left: parent.left;
+            }
+        }
+
+        Media.GameImage {
+            id: gameDetailsBoxFront;
+            imageSource: imgBoxFront;
+            width: parent.width * .50 - vpx(80);
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+                right: parent.right;
+            }
+            alignment: Image.AlignRight;
         }
     }
 
@@ -322,7 +372,7 @@ Item {
         id: fullDescription;
 
         anchors {
-            top: titleBlock.bottom;
+            top: gameGfx.bottom;
             topMargin: vpx(20);
             left: detailsDivider.right;
             leftMargin: vpx(20);
@@ -343,9 +393,9 @@ Item {
         total: 0;
 
         buttons: [
-            { title: 'Play', key: 'A', square: false, sigValue: 'accept' },
-            { title: 'Back', key: 'B', square: false, sigValue: 'cancel' },
-            { title: 'Favorite', key: 'Y', square: false, sigValue: 'filters' },
+            { title: 'Play', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
+            { title: 'Back', key: theme.buttonGuide.cancel, square: false, sigValue: 'cancel' },
+            { title: 'Favorite', key: theme.buttonGuide.filters, square: false, sigValue: 'filters' },
         ];
 
         onFooterButtonClicked: {
