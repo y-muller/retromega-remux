@@ -46,7 +46,7 @@ Item {
     }
 
     property var fullDescText: {
-        return descText + "\n\n" + filenames;
+        return descText + "\n";
     }
 
     property var filenames: {
@@ -67,7 +67,7 @@ Item {
         id: flickable;
 
         contentWidth: fullDesc.width;
-        contentHeight: fullDesc.height;
+        contentHeight: fullDesc.height + fileDetails.height;
         flickableDirection: Flickable.VerticalFlick;
         anchors.fill: parent;
         clip: true;
@@ -80,29 +80,46 @@ Item {
             PropertyAnimation { easing.type: Easing.OutCubic; duration: 150; }
         }
 
-        Text {
-            id: fullDesc;
+        Rectangle {
+            Text {
+                id: fullDesc;
 
-            width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
-            text: fullDescText;
-            wrapMode: Text.WordWrap;
-            lineHeight: 1.2;
-            color: theme.current.detailsColor;
-            horizontalAlignment: Text.AlignJustify;
+                width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
+                text: fullDescText;
+                wrapMode: Text.WordWrap;
+                lineHeight: 1.2;
+                color: theme.current.detailsColor;
+                horizontalAlignment: Text.AlignJustify;
 
-            font {
-                pixelSize: root.height * .035 * theme.fontScale;
-                letterSpacing: -0.35;
-                bold: false;
+                font {
+                    pixelSize: root.height * .03 * theme.fontScale;
+                    letterSpacing: -0.35;
+                    bold: false;
+                }
             }
-        }
-    }
 
-    MouseArea {
-        anchors.fill: parent;
+            Text {
+                id: fileDetails;
 
-        onClicked: {
-            detailsButtonClicked('less');
+                width: fullDescription.width - flickable.leftMargin - flickable.rightMargin;
+                text: filenames;
+                wrapMode: Text.WordWrap;
+                lineHeight: 1.2;
+                color: theme.current.detailsColor;
+                horizontalAlignment: Text.AlignJustify;
+
+                font {
+                    pixelSize: root.height * .024 * theme.fontScale;
+                    letterSpacing: -0.35;
+                    bold: false;
+                }
+                
+                anchors {
+                    top: fullDesc.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                }
+            }
         }
     }
 }

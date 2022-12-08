@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.12
 
 import '../footer' as Footer
+import '../media' as Media
 
 Item {
     anchors.fill: parent;
@@ -111,9 +112,19 @@ Item {
         return stars.join(' ');
     }
 
-    property string imgSrc: {
+    property string imgScreenshot: {
         if (currentGame === null) return '';
         return currentGame.assets.screenshot;
+    }
+
+    property string imgBoxFront: {
+        if (currentGame === null) return '';
+        return currentGame.assets.boxFront;
+    }
+
+    property string imgLogo: {
+        if (currentGame === null) return '';
+        return currentGame.assets.logo;
     }
 
     property string favoriteGlyph: {
@@ -289,9 +300,9 @@ Item {
     Rectangle {
         id: detailsDivider;
 
-        color: theme.current.dividerColor;
-
-        width: 1;
+        //color: theme.current.dividerColor;
+        color: 'transparent';
+        width: 10;
         x: parent.width * .4;
         anchors {
             top: titleBlock.bottom;
@@ -320,12 +331,48 @@ Item {
         }
     }
 
+    Item {
+        id: gameGfx;
+        height: verticalPane.height * .3;
+        anchors {
+            top: titleBlock.bottom;
+            topMargin: vpx(20);
+            left: detailsDivider.right;
+            leftMargin: vpx(40);
+            right: verticalPane.left;
+            rightMargin: vpx(40);
+        }
+
+        Media.GameImage {
+            id: gameDetailsLogo;
+            imageSource: imgLogo;
+            width: parent.width * .55 - vpx(80);
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+                left: parent.left;
+            }
+        }
+
+        Media.GameImage {
+            id: gameDetailsBoxFront;
+            imageSource: imgBoxFront;
+            width: parent.width * .50 - vpx(80);
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+                right: parent.right;
+            }
+            alignment: Image.AlignRight;
+        }
+    }
+
     /* Description pane, scrollable */
     GameDescription {
         id: fullDescription;
 
         anchors {
-            top: titleBlock.bottom;
+            top: gameGfx.bottom;
             topMargin: vpx(20);
             left: detailsDivider.right;
             leftMargin: vpx(20);

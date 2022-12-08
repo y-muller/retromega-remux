@@ -30,6 +30,7 @@ Item {
             color: theme.current.buttonLetterColor;
 
             font {
+                family: (!square && ( theme.buttonGuide == theme.psButtons || theme.buttonGuide == theme.psJapanButtons )) ? unicode.name : 'Sans Serif';
                 pixelSize: fontSize;
                 letterSpacing: -0.3;
                 bold: true;

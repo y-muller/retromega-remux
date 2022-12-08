@@ -260,6 +260,10 @@ FocusScope {
         source: "assets/images/fontello.ttf";
     }
 
+    FontLoader {
+        id: unicode;
+        source: "assets/images/Symbola_hint.ttf";
+    }
 
     // ui components
     CollectionList.Component {

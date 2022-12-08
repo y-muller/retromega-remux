@@ -219,7 +219,8 @@ Item {
             color: theme.current.detailsColor;
             opacity: .7;
             elide: Text.ElideRight;
-            maximumLineCount: 1;
+            maximumLineCount: 2;
+            wrapMode: Text.WordWrap;
             horizontalAlignment: Text.AlignHCenter;
 
             font {

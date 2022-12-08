@@ -65,114 +65,115 @@ Item {
     }
 
 
-        Text {
-            id: developedBy;
-            text: developedByText;
+    Text {
+        id: developedBy;
+        text: developedByText;
 
-            color: theme.current.detailsColor;
-            opacity: .5;
-            elide: Text.ElideRight
-            maximumLineCount: 1;
+        color: theme.current.detailsColor;
+        opacity: .5;
+        elide: Text.ElideRight
+        maximumLineCount: 1;
 
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .04 * theme.fontScale;
-                bold: true;
-            }
-            
-            height: parent.height * .04 + vpx(10) * theme.fontScale;
-            anchors {
-                top: parent.top;
-                left: parent.left;
-                leftMargin: vpx(15);
-                right: parent.right;
-            }
+        font {
+            family: glyphs.name;
+            pixelSize: parent.height * .04 * theme.fontScale;
+            bold: true;
+        }
         
+        height: parent.height * .04 + vpx(10) * theme.fontScale;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
+        }
+    }
+
+    Text {
+        id: genre;
+        text: genreText;
+
+        color: theme.current.detailsColor;
+        opacity: .7;
+        elide: Text.ElideRight
+        maximumLineCount: 1;
+
+        font {
+            family: glyphs.name;
+            pixelSize: parent.height * .05 * theme.fontScale;
+            bold: true;
         }
 
-        Text {
-            id: genre;
-            text: genreText;
+        height: parent.height * .05 + vpx(10) * theme.fontScale;
+        anchors {
+            top: developedBy.bottom;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
+        }
+    }
 
-            color: theme.current.detailsColor;
-            opacity: .7;
-            elide: Text.ElideRight
-            maximumLineCount: 1;
+    Text {
+        id: lastPlayed;
+        text: lastPlayedText;
 
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .05 * theme.fontScale;
-                bold: true;
-            }
+        color: theme.current.detailsColor;
+        opacity: .5;
+        elide: Text.ElideRight
+        maximumLineCount: 1;
 
-            height: parent.height * .05 + vpx(10) * theme.fontScale;
-            anchors {
-                top: developedBy.bottom;
-                left: parent.left;
-                leftMargin: vpx(15);
-                right: parent.right;
-            }
-        
+        font {
+            family: glyphs.name;
+            pixelSize: parent.height * .045 * theme.fontScale;
+            bold: false;
         }
 
-        Text {
-            id: lastPlayed;
-            text: lastPlayedText;
+        height: parent.height * .05 + vpx(10) * theme.fontScale;
+        anchors {
+            top: genre.bottom;
+            topMargin: vpx(5) * theme.fontScale;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
+        }
+    }
 
-            color: theme.current.detailsColor;
-            opacity: .5;
-            elide: Text.ElideRight
-            maximumLineCount: 1;
+    Media.GameImage {
+        id: gameDetailsScreenshot;
 
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .045 * theme.fontScale;
-                bold: false;
-            }
+        imageSource: imgScreenshot;
 
-            height: parent.height * .05 + vpx(10) * theme.fontScale;
-            anchors {
-                top: genre.bottom;
-                topMargin: vpx(5) * theme.fontScale;
-                left: parent.left;
-                leftMargin: vpx(15);
-                right: parent.right;
-            }
-        
+        //height: parent.height * .6;
+        anchors {
+            top: lastPlayed.bottom;
+            topMargin: vpx(20);
+            bottom: parent.bottom;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
         }
 
-        Media.GameImage {
-            id: gameDetailsScreenshot;
+    }
 
-            imageSource: imgSrc;
+    Media.GameVideo {
+        id: gameDetailsVideo;
 
-            //height: parent.height * .6;
-            anchors {
-                top: lastPlayed.bottom;
-                topMargin: vpx(20);
-                bottom: parent.bottom;
-                left: parent.left;
-                right: parent.right;
-            }
-
+        height: parent.height * .6;
+        anchors {
+            top: lastPlayed.bottom;
+            topMargin: vpx(20);
+            bottom: parent.bottom;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
         }
 
-        Media.GameVideo {
-            id: gameDetailsVideo;
+        settingKey: 'gameDetailsVideo';
+        validView: 'gameDetails';
 
-            height: parent.height * .6;
-            anchors {
-                bottom: parent.bottom;
-                left: parent.left;
-                right: parent.right;
-            }
-
-            settingKey: 'gameDetailsVideo';
-            validView: 'gameDetails';
-
-            onVideoToggled: {
-                gameDetailsScreenshot.videoPlaying = videoPlaying;
-            }
+        onVideoToggled: {
+            gameDetailsScreenshot.videoPlaying = videoPlaying;
         }
+    }
 
 }

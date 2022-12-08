@@ -25,9 +25,9 @@ Item {
 
     function setButtonGuide(value) {
         if (valueButtonsXBox && valueButtonsPlaystation) {
-            buttonGuide = psJapanButtons;
-        } else if (!valueButtonsXBox && valueButtonsPlaystation) {
             buttonGuide = psButtons;
+        } else if (!valueButtonsXBox && valueButtonsPlaystation) {
+            buttonGuide = psJapanButtons;
         } else if (valueButtonsXBox && !valueButtonsPlaystation) {
             buttonGuide = xboxButtons;
         } else {

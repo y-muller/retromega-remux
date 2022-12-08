@@ -67,6 +67,7 @@ Item {
         width: parent.width;
         height: parent.height;
         horizontalAlignment: alignment;
+        verticalAlignment: (alignment == Image.AlignHCenter) ? Image.AlignVCenter : Image.AlignTop;
     }
 
     Image {
@@ -107,7 +108,11 @@ Item {
         Rectangle {
             color: 'white';
             radius: 10;
-            anchors.centerIn: (alignment == Image.AlignHCenter) ? parent : null;
+            anchors.centerIn: (alignment == Image.AlignHCenter) ? parent : undefined;
+            anchors.right: (alignment == Image.AlignRight) ? parent.right : undefined;
+            anchors.left: (alignment == Image.AlignLeft) ? parent.left : undefined;
+            //anchors.top: parent.top;
+            //anchors.bottom: parent.bottom;
             width: boxartBuffer.paintedWidth;
             height: boxartBuffer.paintedHeight;
         }
