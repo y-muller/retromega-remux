@@ -69,9 +69,9 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 [![CC-BY-NC-SA](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ---
-![game list dark](.meta/screenshots/Game List Dark Theme.png)
+![game list dark](.meta/screenshots/GameListDarkTheme.png)
 ---
-![game details](.meta/screenshots/Game Details.png)
+![game details](.meta/screenshots/GameDetails.png)
 ---
-![game details PS](.meta/screenshots/Game Details PlayStation Buttons.png)
+![game details PS](.meta/screenshots/GameDetailsPlayStationButtons.png)
 
