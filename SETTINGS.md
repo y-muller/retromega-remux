@@ -15,8 +15,18 @@ Switch between dark and light mode.
 
 ---
 
-## XBox Button Guide
-Change to XBox buttons in the button list.
+## Button Guide
+There are two options for XBox buttons and PlayStation buttons.
+ - None: defaults to the Switch layout, including Switch labels for the shoulder buttons.
+ - XBox: XBox labels but the layout is still identical to the Switch. The accept button is `B`.
+ - PlayStation: PS button label for the Switch layout. The accept button is `CIRCLE`. This is similar to the Japanese PlayStation scheme.
+ - PlayStation and XBox: PS buttons for the XBox layout. The accept button is `CROSS`. This is the western PlayStation scheme.
+
+Obviously not all combinations are covered yet. The many handhelds with Nintendo-style face buttons but shoulder buttons named L1, L2, R1 and R2 are not covered. After-market button replacements are complicating matters further.
+
+Example: my Odin is configured for the XBox layout in the system settings, the face buttons have been replaced with PlayStation buttons. So the 'PlayStation buttons' option is checked for the PS symbols and the 'XBox buttons' option is checked too to have the XBox layout.
+
+This is a bit confusing so I hope to improve this.
 
 ---
 

@@ -1,5 +1,7 @@
 # Customization and Manual Edits
 
+Most of the info below is from Retro Mega Next and might not apply exactly the same way to Sleipnir. Updates to come little by little...
+
 ## Adding New Systems
 - see [DEVICES.md](DEVICES.md)
 
@@ -10,11 +12,6 @@
 - follow the instructions in `/components/resources/Music.qml` [on these lines](https://github.com/plaidman/retromega-next/blob/main/components/resources/Music.qml#L11-L13) to register the music files
 
 ---
-
-## Removing Last Played and/or Favorites Collections
-- remove [these lines](https://github.com/plaidman/retromega-next/blob/main/theme.qml#L140-L141) from `/theme.qml`
-
- ----
 
 ## Customizing Details Screen
 - you can remove certain items from the game metadata section

@@ -2,7 +2,9 @@
 
 Sleipnir, or Retro Mega Sleipnir, is a [Pegasus](https://pegasus-frontend.org) theme for handheld devices.
 
-Adapted from [David Fumberger's RetroMega](https://github.com/djfumberger/retromega) theme. Completely rewritten from scratch by [plaidman](https://github.com/plaidman) to simplify code and allow to add new features easier. And now modified further by y-muller (RedSideOfTheMoon on Pegasus Discord).
+Adapted from [David Fumberger's RetroMega](https://github.com/djfumberger/retromega) theme. Completely rewritten from scratch by [plaidman](https://github.com/plaidman) as [Retro Mega Next](https://github.com/plaidman/retromega-next) to simplify code and allow to add new features easier. And now modified further by y-muller (RedSideOfTheMoon on Pegasus Discord).
+
+The theme should look good on any device with a wide screen. The main target is the AYN Odin so the theme is named after Odin's eight-legged horse.
 
 ---
 
@@ -17,6 +19,7 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 
 ## Features
 - optimized for handheld devices with large screens
+- support for PlayStation buttons
 - controller support
 - sorting/filtering options
 - filter games by name
