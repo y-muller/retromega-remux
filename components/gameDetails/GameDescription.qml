@@ -116,8 +116,6 @@ Item {
                 
                 anchors {
                     top: fullDesc.bottom;
-                    left: parent.left;
-                    right: parent.right;
                 }
             }
         }

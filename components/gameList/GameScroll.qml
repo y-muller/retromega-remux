@@ -182,7 +182,6 @@ Item {
         }
     }
 
-    /* Vertical pane with rating, players, date */
     SkipLetter {
         id: skipLetter;
 
@@ -192,6 +191,7 @@ Item {
         }
     }
 
+    /* Vertical pane with rating, players, date */
     VerticalPane {
         id: verticalPane;
 
@@ -212,57 +212,6 @@ Item {
         height: parent.height;
         x: parent.width / 2;
 
-        Text {
-            id: genre;
-            text: genreText;
-
-            color: theme.current.detailsColor;
-            opacity: .7;
-            elide: Text.ElideRight;
-            maximumLineCount: 2;
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .035 * theme.fontScale;
-                bold: true;
-            }
-
-            height: parent.height * .04;
-            anchors {
-                left: gameListBoxart.right
-                right: parent.right;
-                rightMargin: vpx(10);
-                bottom: lastPlayed.top;
-            }
-        }
-
-        Text {
-            id: lastPlayed;
-            text: lastPlayedText;
-
-            color: theme.current.detailsColor;
-            opacity: .5;
-            elide: Text.ElideRight;
-            maximumLineCount: 1;
-            horizontalAlignment: Text.AlignHCenter;
-
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .035 * theme.fontScale;
-                bold: false;
-            }
-
-            height: parent.height * .04 + vpx(10) * theme.fontScale;
-            anchors {
-                left: gameListBoxart.right;
-                right: parent.right;
-                rightMargin: vpx(10);
-                bottom: parent.bottom;
-                bottomMargin: gameListBoxart.height * .3;
-            }
-        }
 
         /*Rectangle {
             height: parent.height - gameListBoxart.height * .95 - vpx(10);
@@ -337,6 +286,65 @@ Item {
             }
             imageSource: imgBoxFront;
             alignment: Image.AlignLeft;
+        }
+
+        Rectangle {
+            color: 'transparent';
+            anchors {
+                top: gameListScreenshot.bottom;
+                topMargin: vpx(20);
+                left: gameListBoxart.right;
+                leftMargin: vpx(20);
+                right: parent.right;
+                rightMargin: vpx(20);
+                bottom: parent.bottom;
+                bottomMargin: vpx(20);
+            }
+        Text {
+            id: genre;
+            text: genreText;
+
+            color: theme.current.detailsColor;
+            opacity: .7;
+            elide: Text.ElideRight;
+            maximumLineCount: 2;
+            wrapMode: Text.WordWrap;
+            horizontalAlignment: Text.AlignHCenter;
+
+            font {
+                family: glyphs.name;
+                pixelSize: parent.height * .125 * theme.fontScale;
+                bold: true;
+            }
+
+            width: parent.width;
+            anchors {
+                bottom: lastPlayed.top;
+            }
+        }
+
+        Text {
+            id: lastPlayed;
+            text: lastPlayedText;
+
+            color: theme.current.detailsColor;
+            opacity: .5;
+            elide: Text.ElideRight;
+            maximumLineCount: 1;
+            horizontalAlignment: Text.AlignHCenter;
+
+            font {
+                family: glyphs.name;
+                pixelSize: parent.height * .11 * theme.fontScale;
+                bold: false;
+            }
+
+            width: parent.width;
+            anchors {
+                bottom: parent.bottom;
+                bottomMargin: parent.height * .25;
+            }
+        }
         }
 
     }
