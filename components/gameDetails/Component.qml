@@ -82,6 +82,9 @@ Item {
             event.accepted = true;
             onFiltersPressed();
         }
+    }
+
+    Keys.onReleased: {
         if (api.keys.isPageDown(event)) {
             event.accepted = true;
             fullDescription.scrollDown();
