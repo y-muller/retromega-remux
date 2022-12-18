@@ -9,6 +9,7 @@ import 'components/resources' as Resources
 import 'components/themes' as Themes
 import 'components/sorting' as Sorting
 import 'components/attract' as Attract
+import 'components/retroAchievements' as RetroAchievements
 
 FocusScope {
     id: root;
@@ -23,6 +24,7 @@ FocusScope {
     property var currentGameList;
     property int currentGameIndex: -1;
     property var currentGame;
+    property int currentRARecentGameIndex: -1;
 
     property bool onlyFavorites: false;
     property bool onlyMultiplayer: false;
@@ -102,6 +104,22 @@ FocusScope {
         return true;
     }
 
+    function updateRARecentGameIndex(newIndex, forceUpdate = false) {
+        //let moveAnimation = false;
+        const boundedIndex = (settings.get('listWrapAround'))
+                           ? wrap(0, newIndex, cheevosData.raRecentGames.count - 1)
+                           : clamp(0, newIndex, cheevosData.raRecentGames.count - 1);
+
+        if (!forceUpdate && boundedIndex === currentRARecentGameIndex) return false;
+
+        const moveAnimation = ((Math.abs(currentRARecentGameIndex-boundedIndex) === cheevosData.raRecentGames.count - 1) && (cheevosData.raRecentGames.count > 2))
+                           ? true : false;
+
+        currentRARecentGameIndex = boundedIndex;
+        cheevosComponent.updateIndex(currentRARecentGameIndex, moveAnimation);
+
+        return true;
+    }
 
     // code to handle reading and writing api.memory
     Component.onCompleted: {
@@ -238,7 +256,9 @@ FocusScope {
     Resources.GameData { id: gameData; }
     Resources.Sounds { id: sounds; }
     Resources.Music { id: music; }
+    Resources.CheevosData { id: cheevosData; }
     Sorting.Handler { id: sorting; }
+    //RetroAchievements.Handler { id: cheevos; }
 
     FontLoader {
         id: glyphs;
@@ -295,6 +315,13 @@ FocusScope {
 
         visible: currentView === 'sorting';
         focus: currentView === 'sorting';
+    }
+
+    RetroAchievements.Component {
+        id: cheevosComponent;
+
+        visible: currentView === 'cheevos';
+        focus: currentView === 'cheevos';
     }
 
     Attract.Component {

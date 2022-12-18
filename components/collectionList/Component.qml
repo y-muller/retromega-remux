@@ -35,6 +35,12 @@ Item {
         sounds.forward();
     }
 
+    function onCheevosPressed() {
+        previousView = currentView;
+        currentView = 'cheevos';
+        sounds.forward();
+    }
+
     function onAttractPressed() {
         currentView = 'attract';
         sounds.forward();
@@ -49,6 +55,11 @@ Item {
         if (api.keys.isDetails(event)) {
             event.accepted = true;
             onSettingsPressed();
+        }
+
+        if (api.keys.isFilters(event)) {
+            event.accepted = true;
+            onCheevosPressed();
         }
 
         // L1
@@ -102,12 +113,14 @@ Item {
             { title: 'Select', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
             { title: 'Menu', key: theme.buttonGuide.cancel, square: false, sigValue: null },
             { title: 'Settings', key: theme.buttonGuide.details, square: false, sigValue: 'settings' },
+            { title: 'Cheevos', key: theme.buttonGuide.filters, square: false, sigValue: 'cheevos' },
             { title: 'Attract', key: theme.buttonGuide.pageUp, square: true, sigValue: 'attract' },
         ];
 
         onFooterButtonClicked: {
             if (sigValue === 'accept') onAcceptPressed();
             if (sigValue === 'settings') onSettingsPressed();
+            if (sigValue === 'cheevos') onCheevosPressed();
             if (sigValue === 'attract') onAttractPressed();
         }
     }
