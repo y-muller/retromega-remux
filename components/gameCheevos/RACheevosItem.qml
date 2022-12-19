@@ -1,18 +1,17 @@
-import QtQuick 2.15
+ import QtQuick 2.15
 
 import '../media' as Media
 
 Item {
 
-    property string lastPlayedText: {
-        if (currentGame === null) return '';
+    property string dateEarnedText: {
+        if (cheevosData.currentGameID === null) return '';
 
-        const lastPlayed = Date.parse(LastPlayed);
-        if (isNaN(lastPlayed)) return 'Never played';
+        if (DateEarned == 0) return 'Locked';
 
         const now = new Date().getTime();
 
-        let time = Math.floor((now - lastPlayed) / 1000);
+        let time = Math.floor((now - DateEarned) / 1000);
         if (time < 60) {
             return 'Played ' + time + ' seconds ago';
         }
@@ -28,16 +27,11 @@ Item {
         }
 
         time = Math.floor(time / 24);
-        return 'Played ' + time + ' days ago';
+        return 'Earned ' + time + ' days ago';
     }
 
-    property string numCheevosText: {
-        return '' + NumAchieved + ' of ' + NumPossibleAchievements;
-    }
- 
-    property string numHardcoreText: {
-        if (NumAchievedHardcore === 0) return '';
-        return '' + NumAchievedHardcore + ' hardcore';
+    property string pointsText: {
+        return (Hardcore === true ? '(hardcore) ': '')  + Points +' points';
     }
  
     MouseArea {
@@ -45,27 +39,27 @@ Item {
 
         onClicked: {
             console.log( 'clicked ' + index );
-            if (recentRAGamesListView.currentIndex === index) {
+            if (gameCheevosListView.currentIndex === index) {
                 onAcceptPressed();
             } else {
-                const updated = updateRARecentGameIndex(index);
+                const updated = updateGameCheevosIndex(index);
                 if (updated) { sounds.nav(); }
             }
         }
 
         onPressAndHold: {
             console.log( 'long pressed ' + index );
-            if (recentRAGamesListView.currentIndex === index) {
+            if (gameCheevosListView.currentIndex === index) {
                 onDetailsPressed();
             } else {
-                const updated = updateRARecentGameIndex(index);
+                const updated = updateGameCheevosIndex(index);
                 if (updated) { sounds.nav(); }
             }
         }
     }
 
     Media.GameImage {
-        id: gameIcon;
+        id: cheevosIcon;
 
         height: parent.height;
         width: parent.height;  // make it square
@@ -77,17 +71,18 @@ Item {
             leftMargin: vpx(4);
             bottomMargin: vpx(4);
         }
-        imageSource: debugRA ? '' : 'https://media.retroachievements.org' + ImageIcon;
+        imageSource: debugRA ? '' : 'https://media.retroachievements.org/Badge/' + BadgeName + '.png';
     }
 
     Text {
-        id: recentGameTitle;
+        id: cheevosTitle;
 
         text: Title;
         elide: Text.ElideRight;
-        color: recentRAGamesListView.currentIndex === index
+        color: gameCheevosListView.currentIndex === index
             ? theme.current.focusTextColor
             : theme.current.blurTextColor;
+        opacity: DateEarned == 0 ? .5 : 1;
 
         font {
             pixelSize: parent.height * .38;
@@ -95,22 +90,23 @@ Item {
             bold: true;
         }
 
-        width: parent.width * .6;
+        width: parent.width * .75;
         anchors {
             top: parent.top;
             topMargin: vpx(4);
-            left: gameIcon.right;
+            left: cheevosIcon.right;
             leftMargin: 12;
         }
     }
 
     Text {
-        id: recentGameCheevos;
+        id: cheevosPoints;
 
-        text: numCheevosText;
-        color: recentRAGamesListView.currentIndex === index
+        text: pointsText;
+        color: gameCheevosListView.currentIndex === index
             ? theme.current.focusTextColor
             : theme.current.blurTextColor;
+        opacity: DateEarned == 0 ? .5 : 1;
         horizontalAlignment: Text.AlignRight;
 
         font {
@@ -119,7 +115,7 @@ Item {
             bold: true;
         }
 
-        width: parent.width * .3;
+        width: parent.width * .25;
         anchors {
             top: parent.top;
             topMargin: vpx(4);
@@ -129,14 +125,14 @@ Item {
     }
 
     Text {
-        id: recentGameConsole;
+        id: description;
 
-        text: ConsoleName;
+        text: Description;
         elide: Text.ElideRight;
-        color: recentRAGamesListView.currentIndex === index
+        color: gameCheevosListView.currentIndex === index
             ? theme.current.focusTextColor
             : theme.current.blurTextColor;
-        opacity: .8;
+        opacity: DateEarned == 0 ? .4 : 8;
 
         font {
             pixelSize: parent.height * .26;
@@ -144,45 +140,21 @@ Item {
             bold: true;
         }
 
-        width: parent.width * .4;
+        width: parent.width * .75;
         anchors {
-            top: recentGameTitle.bottom;
+            top: cheevosTitle.bottom;
             topMargin: vpx(4);
-            left: gameIcon.right;
+            left: cheevosIcon.right;
             leftMargin: 12;
         }
     }
 
-    Text {
-        id: recentGameLastPlayed;
-
-        text: lastPlayedText;
-        elide: Text.ElideRight;
-        color: recentRAGamesListView.currentIndex === index
-            ? theme.current.focusTextColor
-            : theme.current.blurTextColor;
-        opacity: .7;
-
-        font {
-            pixelSize: parent.height * .26;
-            letterSpacing: -0.3;
-            bold: false;
-        }
-
-        width: parent.width * .35;
-        anchors {
-            top: recentGameTitle.bottom;
-            topMargin: vpx(4);
-            left: recentGameConsole.right;
-            leftMargin: 12;
-        }
-    }
 
     Text {
-        id: recentGameHardcoreNum;
+        id: cheevosDate;
 
-        text: numHardcoreText;
-        color: recentRAGamesListView.currentIndex === index
+        text: dateEarnedText;
+        color: gameCheevosListView.currentIndex === index
             ? theme.current.focusTextColor
             : theme.current.blurTextColor;
         opacity: .7;
@@ -196,7 +168,7 @@ Item {
 
         width: parent.width * .25;
         anchors {
-            top: recentGameTitle.bottom;
+            top: cheevosTitle.bottom;
             topMargin: vpx(4);
             right: parent.right;
             rightMargin: 12;
