@@ -8,8 +8,17 @@
 
 ### Low priority
  - Discovery of music files (no need to edit Music.qml)
+    This doesn't seem to have an easy solution.
  
 # Changes
+
+## 27/12/2022
+Initial Achievements support
+- browse your latest games on RetroAchievements
+- check your progress per game
+- the feature is enabled if both the user name and API key are entered in the settings
+- some minor fixes
+
 ## 09/12/2022
 First public release. Based on Retro Mega Next as of 22/08/2022
 - Game List redesign for more info

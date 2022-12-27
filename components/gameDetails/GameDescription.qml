@@ -22,14 +22,12 @@ Item {
         /*             flickable.contentY + fullDesc.font.pixelSize * 10, */
     }
 
-    Keys.onPressed: {
+    Keys.onReleased: {
         if (api.keys.isPageDown(event)) {
-            console.log("page down");
             event.accepted = true;
             fullDescription.scrollDown();
         }
         if (api.keys.isPageUp(event)) {
-            console.log("page up");
             event.accepted = true;
             fullDescription.scrollUp();
         }

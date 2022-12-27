@@ -6,6 +6,10 @@ Adapted from [David Fumberger's RetroMega](https://github.com/djfumberger/retrom
 
 The theme should look good on any device with a wide screen. The main target is the AYN Odin so the theme is named after Odin's eight-legged horse.
 
+I tested it on a device with a 640x480 resolution and it still looked pretty good.
+
+The newest release adds initial support for Retro Achievements. There might still be some rough edges.
+
 ---
 
 ## Installation and Scraping
@@ -19,6 +23,7 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 
 ## Features
 - optimized for handheld devices with large screens
+- RetroAchievements browser
 - support for PlayStation buttons
 - controller support
 - sorting/filtering options
@@ -77,4 +82,6 @@ To setup Pegasus with scraped assets, there's a great written guide [available h
 ![game details](.meta/screenshots/GameDetails.png)
 ---
 ![game details PS](.meta/screenshots/GameDetailsPlayStationButtons.png)
+---
+![cheevos](.meta/screenshots/AchievementsBrowser.png)
 

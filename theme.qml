@@ -9,9 +9,13 @@ import 'components/resources' as Resources
 import 'components/themes' as Themes
 import 'components/sorting' as Sorting
 import 'components/attract' as Attract
+import 'components/retroAchievements' as RetroAchievements
+import 'components/gameCheevos' as GameCheevos
 
 FocusScope {
     id: root;
+
+    property bool debugRA: false;
 
     property string currentView: 'collectionList';
     property string previousView: 'collectionList';
@@ -23,6 +27,9 @@ FocusScope {
     property var currentGameList;
     property int currentGameIndex: -1;
     property var currentGame;
+    property int currentRARecentGameIndex: -1;
+    property int currentGameCheevosIndex: -1;
+    property bool cheevosEnabled: false;
 
     property bool onlyFavorites: false;
     property bool onlyMultiplayer: false;
@@ -30,6 +37,8 @@ FocusScope {
     property string sortKey: 'sortBy';
     property var sortDir: Qt.AscendingOrder;
     property string nameFilter: '';
+    property string textInputTitle: '';
+    property string textInputValue: '';
 
     function addCurrentViewCallback(callback) {
         currentViewCallbacks.push(callback);
@@ -102,6 +111,40 @@ FocusScope {
         return true;
     }
 
+    function updateRARecentGameIndex(newIndex, forceUpdate = false) {
+        //let moveAnimation = false;
+        const boundedIndex = (settings.get('listWrapAround'))
+                           ? wrap(0, newIndex, cheevosData.raRecentGames.count - 1)
+                           : clamp(0, newIndex, cheevosData.raRecentGames.count - 1);
+
+        if (!forceUpdate && boundedIndex === currentRARecentGameIndex) return false;
+
+        const moveAnimation = ((Math.abs(currentRARecentGameIndex-boundedIndex) === cheevosData.raRecentGames.count - 1) && (cheevosData.raRecentGames.count > 2))
+                           ? true : false;
+
+        currentRARecentGameIndex = boundedIndex;
+        cheevosComponent.updateIndex(currentRARecentGameIndex, moveAnimation);
+
+        return true;
+    }
+
+    function updateGameCheevosIndex(newIndex, forceUpdate = false) {
+        //let moveAnimation = false;
+        const boundedIndex = (settings.get('listWrapAround'))
+                           ? wrap(0, newIndex, cheevosData.sortedGameCheevos.count - 1)
+                           : clamp(0, newIndex, cheevosData.sortedGameCheevos.count - 1);
+
+        if (!forceUpdate && boundedIndex === currentGameCheevosIndex) return false;
+
+        const moveAnimation = ((Math.abs(currentGameCheevosIndex-boundedIndex) === cheevosData.sortedGameCheevos.count - 1) && (cheevosData.sortedGameCheevos.count > 2))
+                           ? true : false;
+
+        currentGameCheevosIndex = boundedIndex;
+        gameCheevos.updateIndex(currentGameCheevosIndex, moveAnimation);
+
+        return true;
+    }
+
 
     // code to handle reading and writing api.memory
     Component.onCompleted: {
@@ -118,6 +161,7 @@ FocusScope {
             favoritesOnTop = enabled;
         });
 
+
         updateCollectionIndex(api.memory.get('currentCollectionIndex') ?? -1);
         updateSortedCollection();
         updateGameIndex(api.memory.get('currentGameIndex') ?? -1, true);
@@ -131,10 +175,15 @@ FocusScope {
             nameFilter = '';
         }
 
+        cheevosEnabled = settings.get('raUserName') !== '' && settings.get('raApiKey') !== '';
+
         sounds.start();
     }
 
     Component.onDestruction: {
+        if (currentView == 'gameCheevos' ) {
+            currentView = previousView;
+        }
         api.memory.set('currentView', currentView);
         api.memory.set('currentCollectionIndex', currentCollectionIndex);
         api.memory.set('currentGameIndex', currentGameIndex);
@@ -144,7 +193,7 @@ FocusScope {
         api.memory.set('sortKey', sortKey);
         api.memory.set('sortDir', sortDir);
         api.memory.set('nameFilter', nameFilter);
-
+        
         settings.saveAll();
     }
 
@@ -238,6 +287,7 @@ FocusScope {
     Resources.GameData { id: gameData; }
     Resources.Sounds { id: sounds; }
     Resources.Music { id: music; }
+    Resources.CheevosData { id: cheevosData; }
     Sorting.Handler { id: sorting; }
 
     FontLoader {
@@ -295,6 +345,20 @@ FocusScope {
 
         visible: currentView === 'sorting';
         focus: currentView === 'sorting';
+    }
+
+    RetroAchievements.Component {
+        id: cheevosComponent;
+
+        visible: currentView === 'cheevos';
+        focus: currentView === 'cheevos';
+    }
+
+    GameCheevos.Component {
+        id: gameCheevos;
+
+        visible: currentView === 'gameCheevos';
+        focus: currentView === 'gameCheevos';
     }
 
     Attract.Component {
