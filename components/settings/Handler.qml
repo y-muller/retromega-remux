@@ -13,7 +13,6 @@ Item {
     function toggle(key) { set(key, !values[key]); }
 
     function get(key) {
-        //console.log( 'key: ' + key + ' - value: ' + values[key]);
         if (values[key] === null) {
             set(key, api.memory.get(key) ?? defaults[key]);
         }

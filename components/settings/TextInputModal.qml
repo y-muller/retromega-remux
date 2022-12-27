@@ -6,8 +6,6 @@ import '../footer' as Footer
 Item {
     property var blurSource;
     property alias textInput: textInput;
-    //property alias textInputTitle: textInputTitle;
-    //property alias textInputValue: textInputValue;
 
     // background to lighten or darken the blur effect, since it's translucent
     Rectangle {
