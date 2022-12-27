@@ -36,6 +36,7 @@ Item {
     }
 
     function onCheevosPressed() {
+        if (!cheevosEnabled) return;
         previousView = currentView;
         currentView = 'cheevos';
         sounds.forward();
@@ -113,7 +114,7 @@ Item {
             { title: 'Select', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
             { title: 'Menu', key: theme.buttonGuide.cancel, square: false, sigValue: null },
             { title: 'Settings', key: theme.buttonGuide.details, square: false, sigValue: 'settings' },
-            { title: 'Cheevos', key: theme.buttonGuide.filters, square: false, sigValue: 'cheevos' },
+            { title: 'Cheevos', key: theme.buttonGuide.filters, square: false, visible: cheevosEnabled, sigValue: 'cheevos' },
             { title: 'Attract', key: theme.buttonGuide.pageUp, square: true, sigValue: 'attract' },
         ];
 

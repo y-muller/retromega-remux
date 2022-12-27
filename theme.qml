@@ -29,6 +29,7 @@ FocusScope {
     property var currentGame;
     property int currentRARecentGameIndex: -1;
     property int currentGameCheevosIndex: -1;
+    property bool cheevosEnabled: false;
 
     property bool onlyFavorites: false;
     property bool onlyMultiplayer: false;
@@ -36,6 +37,8 @@ FocusScope {
     property string sortKey: 'sortBy';
     property var sortDir: Qt.AscendingOrder;
     property string nameFilter: '';
+    property string textInputTitle: '';
+    property string textInputValue: '';
 
     function addCurrentViewCallback(callback) {
         currentViewCallbacks.push(callback);
@@ -172,12 +175,13 @@ FocusScope {
             nameFilter = '';
         }
 
+        cheevosEnabled = settings.get('raUserName') !== '' && settings.get('raApiKey') !== '';
+
         sounds.start();
     }
 
     Component.onDestruction: {
         if (currentView == 'gameCheevos' ) {
-            console.log( 'Setting currentView to ' + previousView );
             currentView = previousView;
         }
         api.memory.set('currentView', currentView);

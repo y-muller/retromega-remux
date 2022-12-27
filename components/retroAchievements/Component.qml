@@ -35,8 +35,6 @@ Item {
     }
 
     function onAcceptPressed() {
-        console.log( 'accept pressed' );
-        console.log( 'index ' +  recentRAGamesListView.currentIndex );
         cheevosData.currentGameID = cheevosData.raRecentGames.get(recentRAGamesListView.currentIndex).GameID;
         previousView = currentView;
         currentView = 'gameCheevos';
@@ -152,7 +150,7 @@ Item {
         buttons: [
             { title: 'Details', key: theme.buttonGuide.accept, square: false, sigValue: 'accept' },
             { title: 'Back', key: theme.buttonGuide.cancel, square: false, sigValue: 'cancel' },
-            { title: 'Refresh', key: theme.buttonGuide.details, square: false, sigValue: 'refresh' },
+            { title: 'Refresh', key: theme.buttonGuide.filters, square: false, sigValue: 'refresh' },
         ];
 
         onFooterButtonClicked: {
@@ -205,7 +203,7 @@ Item {
 
         Text {
             id: userName;
-            text: cheevosData.userName;
+            text: cheevosData.raUserName;
 
             color: theme.current.detailsColor;
             opacity: .9;

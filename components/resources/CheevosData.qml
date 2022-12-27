@@ -6,8 +6,8 @@ Item {
     property alias sortedGameCheevos: sortedGameCheevos;
 
     property bool dataInitialised: false; // set to true on first activation of the cheevos view
-    property var userName;
-    property var apiKey;
+    property string raUserName: '';
+    property string raApiKey: '';
     property var avatarImgPath;
     property var avatarUrl;
     property var softcorePoints;
@@ -15,7 +15,14 @@ Item {
     property var recentCount: 20;
     property var recentOffset: 0;
     property var currentGameID: -1;
-    property var currentGameDetails: {};
+    property var currentGameDetails: { "Title": "",
+                                        "ImageIcon": "",
+                                        "ConsoleId": "", "ConsoleName": "",
+                                        "Genre": "",
+                                        "NumAchievements": 0,
+                                        "NumAwardedToUserHardcore": 0,
+                                        "NumAwardedToUser": 0
+                                      };
 
     property string noGameText;
     property var userSummary;
@@ -38,19 +45,20 @@ Item {
 
 
     Component.onCompleted: {
-        let key = api.memory.get( 'raApiKey' );
-        if ( key === undefined ) {
-            api.memory.set( 'raApiKey', 'RA_API_KEY' );
-        }
-        apiKey = key;
-
-        let user = api.memory.get( 'raUserName' );
-        if ( user === undefined ) {
-            api.memory.set( 'raUserName', 'RA_USERNAME' );
-        }
-        userName = user;
-        
         avatarImgPath = api.memory.get( 'raAvatar' );
+        raUserName = settings.get('raUserName');
+        raApiKey = settings.get('raApiKey');
+
+        settings.addCallback('raUserName', function () {
+            console.log("raUsername callback!");
+            raUserName = settings.get('raUserName');
+            dataInitialised = false;
+        });
+        settings.addCallback('raApiKey', function () {
+            console.log("raApiKey callback!");
+            raApiKey = settings.get('raApiKey');
+            dataInitialised = false;
+        });
 
         // wait for the 'cheevos' view to become active
         checkCheevosView(currentView);
@@ -59,24 +67,27 @@ Item {
         });
     }
 
+    onDataInitialisedChanged: {
+        console.log( "dataInitialised changed: " + dataInitialised );
+    }
+
     onAvatarImgPathChanged: {
-        //console.log( 'avatar changed to ' + avatarImgPath );
         if (avatarImgPath !== undefined) {
             avatarUrl = 'https://media.retroachievements.org' + avatarImgPath;
+        }
+        else {
+            avatarUrl = '';
         }
     }
     
     onCurrentGameIDChanged: {
-        console.log( 'New Game: ' + currentGameID );
         refreshGameCheevos();
     }
     
     function checkCheevosView(currentView) {
         if (currentView === 'cheevos') {
-            console.log( 'cheevos view !' );    
             if (!dataInitialised) {
-                console.log( 'cheevos first run !' );    
-                if (userName !== undefined && apiKey !== undefined && avatarImgPath === undefined) {
+                if (cheevosEnabled && avatarImgPath === undefined) {
                     updateAvatar();
                 }
                 
@@ -89,7 +100,8 @@ Item {
     function updateAvatar() {
       if (!debugRA) {
         var https = new XMLHttpRequest()
-        var url = "https://retroachievements.org/API/API_GetUserSummary.php?z=" + userName + "&y=" + apiKey + "&u=" + userName;
+        var url = "https://retroachievements.org/API/API_GetUserSummary.php?z=" + raUserName + "&y=" + raApiKey + "&u=" + raUserName;
+        console.log( "URL: " + url );
         https.open("GET", url, true);
 
         https.onreadystatechange = function() { 
@@ -116,7 +128,7 @@ Item {
     function updatePoints() {
       if (!debugRA) {
         var https = new XMLHttpRequest()
-        var url = "https://retroachievements.org/API/API_GetUserRankAndScore.php?z=" + userName + "&y=" + apiKey + "&u=" + userName;
+        var url = "https://retroachievements.org/API/API_GetUserRankAndScore.php?z=" + raUserName + "&y=" + raApiKey + "&u=" + raUserName;
         https.open("GET", url, true);
 
         https.onreadystatechange = function() { 
@@ -128,8 +140,6 @@ Item {
 
                     softcorePoints = points.SoftcoreScore;
                     hardcorePoints = points.Score;
-                    console.log( softcorePoints );
-                    console.log( hardcorePoints );
                 }
                 else {
                     noGameText = "Error communicating with RetroAchievements server"
@@ -148,8 +158,9 @@ Item {
     function updateRecentGames() {
         if (!debugRA) {
             var https = new XMLHttpRequest()
-            var url = "https://retroachievements.org/API/API_GetUserRecentlyPlayedGames.php?z=" + userName + "&y=" + apiKey + "&u=" + userName
+            var url = "https://retroachievements.org/API/API_GetUserRecentlyPlayedGames.php?z=" + raUserName + "&y=" + raApiKey + "&u=" + raUserName
                         + "&c=" + recentCount + "&o=" + recentOffset;
+            console.log( "URL: " + url );
             https.open("GET", url, true);
 
             https.onreadystatechange = function() { 
@@ -222,11 +233,11 @@ Item {
     function updateGameCheevos() {
         if (!debugRA) {
             var https = new XMLHttpRequest()
-            var url = "https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?z=" + userName + "&y=" + apiKey + "&u=" + userName
+            var url = "https://retroachievements.org/API/API_GetGameInfoAndUserProgress.php?z=" + raUserName + "&y=" + raApiKey + "&u=" + raUserName
                         + "&g=" + currentGameID ;
+            console.log( "URL: " + url );
             https.open("GET", url, true);
 
-            console.log('url ' + url );
             https.onreadystatechange = function() { 
                 if (https.readyState == XMLHttpRequest.DONE) {
                     if (https.status == 200) {

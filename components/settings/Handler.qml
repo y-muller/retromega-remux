@@ -5,13 +5,15 @@ Item {
         'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'buttonsXBox', 'buttonsPlaystation',
         'twelveHour','smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
         'quickVideo', 'dropShadow', 'resetNameFilter', 'attractTitle',
-        'favoritesOnTop', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites'
+        'favoritesOnTop', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites',
+        'raUserName', 'raApiKey'
     ];
 
     function title(key) { return titles[key]; }
     function toggle(key) { set(key, !values[key]); }
 
     function get(key) {
+        //console.log( 'key: ' + key + ' - value: ' + values[key]);
         if (values[key] === null) {
             set(key, api.memory.get(key) ?? defaults[key]);
         }
@@ -67,6 +69,8 @@ Item {
         'showAllGames': true,
         'showRecents': true,
         'showFavorites': true,
+        'raUserName': '',
+        'raApiKey': '',
     }
 
     property var values: {
@@ -90,6 +94,8 @@ Item {
         'showAllGames': null,
         'showRecents': null,
         'showFavorites': null,
+        'raUserName': null,
+        'raApiKey': null,
     }
 
     property var callbacks: {
@@ -113,6 +119,8 @@ Item {
         'showAllGames': [],
         'showRecents': [],
         'showFavorites': [],
+        'raUserName': [],
+        'raApiKey': [],
     }
 
     property var titles: {
@@ -136,5 +144,7 @@ Item {
         'showAllGames': 'Show All Games Collection',
         'showRecents': 'Show Last Played Collection',
         'showFavorites': 'Show Favorites Collection',
+        'raUserName': 'RetroAchievements User Name',
+        'raApiKey': 'RetroAchievements API Key',
     }
 }

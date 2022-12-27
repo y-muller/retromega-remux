@@ -44,7 +44,6 @@ Item {
         anchors.fill: parent;
 
         onClicked: {
-            console.log( 'clicked ' + index );
             if (recentRAGamesListView.currentIndex === index) {
                 onAcceptPressed();
             } else {
@@ -54,7 +53,6 @@ Item {
         }
 
         onPressAndHold: {
-            console.log( 'long pressed ' + index );
             if (recentRAGamesListView.currentIndex === index) {
                 onDetailsPressed();
             } else {

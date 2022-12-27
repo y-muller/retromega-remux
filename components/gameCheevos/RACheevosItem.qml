@@ -38,7 +38,6 @@ Item {
         anchors.fill: parent;
 
         onClicked: {
-            console.log( 'clicked ' + index );
             if (gameCheevosListView.currentIndex === index) {
                 onAcceptPressed();
             } else {
@@ -48,7 +47,6 @@ Item {
         }
 
         onPressAndHold: {
-            console.log( 'long pressed ' + index );
             if (gameCheevosListView.currentIndex === index) {
                 onDetailsPressed();
             } else {

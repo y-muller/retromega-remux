@@ -37,8 +37,7 @@ Item {
     }
 
     function onAcceptPressed() {
-        console.log( 'accept pressed' );
-        console.log( 'index ' +  gameCheevosListView.currentIndex );
+        // console.log( 'index ' +  gameCheevosListView.currentIndex );
     }
 
     function onCancelPressed() {
@@ -213,7 +212,7 @@ Item {
 
         Text {
             id: userName;
-            text: cheevosData.userName;
+            text: cheevosData.raUserName;
 
             color: theme.current.detailsColor;
             opacity: .9;

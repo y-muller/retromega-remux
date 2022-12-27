@@ -2,11 +2,14 @@ import QtQuick 2.15
 
 Item {
     function getGlyph() {
-        if (settings.get(modelData)) {
-            return glyphs.enabled;
-        } else {
-            return glyphs.disabled;
+        if (typeof settings.get(modelData) === 'boolean') {
+            if (settings.get(modelData)) {
+                return glyphs.enabled;
+            } else {
+                return glyphs.disabled;
+            }
         }
+        else return ' ';
     }
 
     Component.onCompleted: {

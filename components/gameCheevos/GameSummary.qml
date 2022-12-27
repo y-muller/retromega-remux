@@ -18,6 +18,13 @@ Item {
         }
         return text;
     }
+    
+    property string gameIconUrl : {
+        if (cheevosData.currentGameDetails.ImageIcon === undefined || cheevosData.currentGameDetails.ImageIcon == '') {
+            return '';
+        }
+        return 'https://media.retroachievements.org' + cheevosData.currentGameDetails.ImageIcon;
+    }
 
     Media.GameImage {
         id: gameIcon;
@@ -32,7 +39,7 @@ Item {
             rightMargin: vpx(22);
             bottomMargin: vpx(10);
         }
-        imageSource: /*debugRA ? '' :*/ 'https://media.retroachievements.org' + cheevosData.currentGameDetails.ImageIcon;
+        imageSource: gameIconUrl;
     }
 
     Text {
@@ -40,7 +47,7 @@ Item {
 
         text: cheevosData.currentGameDetails.Title;
         elide: Text.ElideRight;
-        //color: theme.current.focusTextColor;
+        color: theme.current.detailsColor;
 
         font {
             pixelSize: parent.height * .38;
@@ -62,7 +69,7 @@ Item {
 
         text: cheevosData.currentGameDetails.ConsoleName;
         elide: Text.ElideRight;
-        //color: theme.current.focusTextColor;
+        color: theme.current.detailsColor;
         opacity: .8;
 
         font {
@@ -85,6 +92,7 @@ Item {
 
         text: completionText;
         horizontalAlignment: Text.AlignRight;
+        color: theme.current.detailsColor;
 
         font {
             pixelSize: parent.height * .38;
@@ -106,6 +114,7 @@ Item {
 
         text: numEarnedText;
         horizontalAlignment: Text.AlignRight;
+        color: theme.current.detailsColor;
         opacity: .7;
 
         font {
