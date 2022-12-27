@@ -87,3 +87,10 @@ Adds a small delay when loading screenshot images on the game list. This can imp
 
 ## Show All Games/Last Played/Favorites
 Optionally show/hide these meta-collections.
+
+---
+
+## RetroAchievements User Name/API Key
+Set your RetroAchievements credentials if you want to use the Achievements browser. The API Key is available on the RA website in "My Pages > Settings".
+Note that it is the API Key that is required here, not your password.
+
