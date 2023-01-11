@@ -17,7 +17,8 @@ The newest release adds initial support for Retro Achievements. There might stil
 
 The theme uses `boxart2dfront` on the games list, `screenshot`, `logo` and `boxFront` in the game detail view, and `video` in both areas.
 
-To setup Pegasus with scraped assets, there's a great written guide [available here](https://basvroegop.nl/pegasus) or a great video guide [available here](https://www.youtube.com/watch?v=fGWve7YYwGQ). You can also use [DragoonDorise's pegasus installer](https://www.pegasus-installer.com/) to scrape files on your device easier.
+There are several resources detailing the setup of Pegasus with scraped assets. My own [Skyscraper setup for Android](https://github.com/y-muller/pegasus-android-helpers) includes helper scripts to simplify metadata management, including helping with adding [Android games](https://github.com/y-muller/pegasus-android-helpers/blob/main/ANDROID_APPS.md) to Pegasus.
+There is also this video guide [available here](https://www.youtube.com/watch?v=fGWve7YYwGQ) or you can also use [DragoonDorise's pegasus installer](https://www.pegasus-installer.com/) to scrape files on your device.
 
 ---
 
