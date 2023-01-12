@@ -12,6 +12,10 @@
  
 # Changes
 
+## 12/01/2023
+- Display `tile` asset instead of cover if available in Game Details
+  (suggested byRayz0rum).
+
 ## 27/12/2022
 Initial Achievements support
 - browse your latest games on RetroAchievements

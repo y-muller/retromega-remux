@@ -15,7 +15,7 @@ The newest release adds initial support for Retro Achievements. There might stil
 ## Installation and Scraping
 [Download](https://github.com/y-muller/retromega-sleipnir) and extract to your [theme directory](http://pegasus-frontend.org/docs/user-guide/installing-themes) under the folder retromega-sleipnir. You can then select the theme in the settings menu of Pegasus.
 
-The theme uses `boxart2dfront` on the games list, `screenshot`, `logo` and `boxFront` in the game detail view, and `video` in both areas.
+The theme uses the assets `boxFront`, `screenshot`, `wheel` and `video`. The `tile` asset is used in the game details if present.
 
 There are several resources detailing the setup of Pegasus with scraped assets. My own [Skyscraper setup for Android](https://github.com/y-muller/pegasus-android-helpers) includes helper scripts to simplify metadata management, including helping with adding [Android games](https://github.com/y-muller/pegasus-android-helpers/blob/main/ANDROID_APPS.md) to Pegasus.
 There is also this video guide [available here](https://www.youtube.com/watch?v=fGWve7YYwGQ) or you can also use [DragoonDorise's pegasus installer](https://www.pegasus-installer.com/) to scrape files on your device.

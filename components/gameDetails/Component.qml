@@ -120,8 +120,9 @@ Item {
         return currentGame.assets.screenshot;
     }
 
-    property string imgBoxFront: {
+    property string imgTile: {
         if (currentGame === null) return '';
+        if (currentGame.assets.tile !== null) return currentGame.assets.tile;
         return currentGame.assets.boxFront;
     }
 
@@ -358,8 +359,8 @@ Item {
         }
 
         Media.GameImage {
-            id: gameDetailsBoxFront;
-            imageSource: imgBoxFront;
+            id: gameDetailsTile;
+            imageSource: imgTile;
             width: parent.width * .50 - vpx(80);
             anchors {
                 top: parent.top;
