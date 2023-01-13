@@ -122,7 +122,7 @@ Item {
 
     property string imgTile: {
         if (currentGame === null) return '';
-        if (currentGame.assets.tile !== null) return currentGame.assets.tile;
+        if (currentGame.assets.tile !== "") return currentGame.assets.tile;
         return currentGame.assets.boxFront;
     }
 
