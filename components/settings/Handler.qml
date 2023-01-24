@@ -5,7 +5,7 @@ Item {
         'listWrapAround', 'bgMusic', 'navSounds', 'darkMode', 'buttonsXBox', 'buttonsPlaystation',
         'twelveHour','smallFont', 'gameListVideo', 'gameDetailsVideo', 'quietVideo',
         'quickVideo', 'dropShadow', 'resetNameFilter', 'attractTitle',
-        'favoritesOnTop', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites',
+        'favoritesOnTop', 'playTime', 'delayedImage', 'showAllGames', 'showRecents', 'showFavorites',
         'raUserName', 'raApiKey'
     ];
 
@@ -64,6 +64,7 @@ Item {
         'resetNameFilter': false,
         'attractTitle': true,
         'favoritesOnTop': false,
+        'playTime': true,
         'delayedImage': false,
         'showAllGames': true,
         'showRecents': true,
@@ -89,6 +90,7 @@ Item {
         'resetNameFilter': null,
         'attractTitle': null,
         'favoritesOnTop': null,
+        'playTime': null,
         'delayedImage': null,
         'showAllGames': null,
         'showRecents': null,
@@ -114,6 +116,7 @@ Item {
         'resetNameFilter': [],
         'attractTitle': [],
         'favoritesOnTop': [],
+        'playTime': [],
         'delayedImage': [],
         'showAllGames': [],
         'showRecents': [],
@@ -139,6 +142,7 @@ Item {
         'resetNameFilter': 'Clear Name Filter On Reload',
         'attractTitle': 'Game Title On Attract Mode',
         'favoritesOnTop': 'Favorites On Top',
+        'playTime': 'Show Play Time',
         'delayedImage': 'Delayed Images',
         'showAllGames': 'Show All Games Collection',
         'showRecents': 'Show Last Played Collection',

@@ -94,6 +94,26 @@ Item {
         return 'Played ' + time + ' days ago';
     }
 
+    property string playTimeText: {
+        if (currentGame === null) return '';
+
+        const playTime = currentGame.playTime;
+        if (playTime == 0) return '';
+        
+        if (playTime < 60) {
+            return 'Play time: ' + playTime + ' seconds';
+        }
+
+        let minutes = Math.floor(playTime / 60);
+        if (minutes < 60) {
+            return 'Play time: ' + minutes + ' minute' + (minutes>1 ? 's' : '');
+        }
+
+        let hours = Math.floor(minutes / 60);
+        minutes = minutes - hours * 60;
+        return 'Play time: ' + hours + ' hr' + (hours>1 ? 's ' : ' ') + (minutes>0 ? minutes + ' min' + (minutes>1 ? 's' : '') : '');
+    }
+
     property var sortingText: {
         if (sortKey === 'release') {
             sortingFont = global.fonts.sans;
@@ -117,6 +137,10 @@ Item {
         return 'No Games';
     }
 
+    function playTimeCallback(enabled) {
+        playTime.visible = enabled;
+    }
+
     Component.onCompleted: {
         gamesListView.currentIndex = currentGameIndex;
         gamesListView.positionViewAtIndex(currentGameIndex, ListView.Center);
@@ -124,6 +148,9 @@ Item {
         settings.addCallback('gameListVideo', function () {
             gameListVideo.switchVideo();
         });
+
+        playTimeCallback(settings.get('playTime'));
+        settings.addCallback('playTime', playTimeCallback);
     }
 
     Text {
@@ -300,51 +327,74 @@ Item {
                 bottom: parent.bottom;
                 bottomMargin: vpx(20);
             }
-        Text {
-            id: genre;
-            text: genreText;
+            Text {
+                id: genre;
+                text: genreText;
 
-            color: theme.current.detailsColor;
-            opacity: .7;
-            elide: Text.ElideRight;
-            maximumLineCount: 2;
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
+                color: theme.current.detailsColor;
+                opacity: .7;
+                elide: Text.ElideRight;
+                maximumLineCount: 2;
+                wrapMode: Text.WordWrap;
+                horizontalAlignment: Text.AlignHCenter;
 
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .125 * theme.fontScale;
-                bold: true;
+                font {
+                    family: glyphs.name;
+                    pixelSize: parent.height * .125 * theme.fontScale;
+                    bold: true;
+                }
+
+                width: parent.width;
+                anchors {
+                    bottom: lastPlayed.top;
+                }
             }
 
-            width: parent.width;
-            anchors {
-                bottom: lastPlayed.top;
+            Text {
+                id: lastPlayed;
+                text: lastPlayedText;
+
+                color: theme.current.detailsColor;
+                opacity: .5;
+                elide: Text.ElideRight;
+                maximumLineCount: 1;
+                horizontalAlignment: Text.AlignHCenter;
+
+                font {
+                    family: glyphs.name;
+                    pixelSize: parent.height * .11 * theme.fontScale;
+                    bold: false;
+                }
+
+                width: parent.width;
+                anchors {
+                    bottom: playTime.top;
+                    //bottomMargin: parent.height * .25;
+                }
             }
-        }
 
-        Text {
-            id: lastPlayed;
-            text: lastPlayedText;
+            Text {
+                id: playTime;
+                text: playTimeText;
 
-            color: theme.current.detailsColor;
-            opacity: .5;
-            elide: Text.ElideRight;
-            maximumLineCount: 1;
-            horizontalAlignment: Text.AlignHCenter;
+                color: theme.current.detailsColor;
+                opacity: .5;
+                elide: Text.ElideRight;
+                maximumLineCount: 1;
+                horizontalAlignment: Text.AlignHCenter;
 
-            font {
-                family: glyphs.name;
-                pixelSize: parent.height * .11 * theme.fontScale;
-                bold: false;
+                font {
+                    family: glyphs.name;
+                    pixelSize: parent.height * .09 * theme.fontScale;
+                    bold: false;
+                }
+
+                width: parent.width;
+                anchors {
+                    bottom: parent.bottom;
+                    bottomMargin: parent.height * .25;
+                }
             }
-
-            width: parent.width;
-            anchors {
-                bottom: parent.bottom;
-                bottomMargin: parent.height * .25;
-            }
-        }
         }
 
     }

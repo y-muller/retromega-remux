@@ -47,6 +47,26 @@ Item {
         return 'Played ' + time + ' days ago';
     }
 
+    property string playTimeText: {
+        if (currentGame === null) return '';
+
+        const playTime = currentGame.playTime;
+        if (playTime == 0) return '';
+        
+        if (playTime < 60) {
+            return 'Play time: ' + playTime + ' seconds';
+        }
+
+        let minutes = Math.floor(playTime / 60);
+        if (minutes < 60) {
+            return 'Play time: ' + minutes + ' minute' + (minutes>1 ? 's' : '');
+        }
+
+        let hours = Math.floor(minutes / 60);
+        minutes = minutes - hours * 60;
+        return 'Play time: ' + hours + ' hr' + (hours>1 ? 's ' : ' ') + (minutes>0 ? minutes + ' min' + (minutes>1 ? 's' : '') : '');
+    }
+
     property string developedByText: {
         if (currentGame === null) return '';
 
@@ -64,6 +84,14 @@ Item {
         return devtext;
     }
 
+    function playTimeCallback(enabled) {
+        playTime.visible = enabled;
+    }
+
+    Component.onCompleted: {
+        playTimeCallback(settings.get('playTime'));
+        settings.addCallback('playTime', playTimeCallback);
+    }
 
     Text {
         id: developedBy;
@@ -138,6 +166,31 @@ Item {
         }
     }
 
+    Text {
+        id: playTime;
+        text: playTimeText;
+
+        color: theme.current.detailsColor;
+        opacity: .5;
+        elide: Text.ElideRight
+        maximumLineCount: 1;
+
+        font {
+            family: glyphs.name;
+            pixelSize: parent.height * .035 * theme.fontScale;
+            bold: false;
+        }
+
+        height: parent.height * .04 + vpx(10) * theme.fontScale;
+        anchors {
+            top: lastPlayed.bottom;
+            topMargin: vpx(1) * theme.fontScale;
+            left: parent.left;
+            leftMargin: vpx(15);
+            right: parent.right;
+        }
+    }
+
     Media.GameImage {
         id: gameDetailsScreenshot;
 
@@ -145,7 +198,7 @@ Item {
 
         //height: parent.height * .6;
         anchors {
-            top: lastPlayed.bottom;
+            top: playTime.bottom;
             topMargin: vpx(20);
             bottom: parent.bottom;
             left: parent.left;
