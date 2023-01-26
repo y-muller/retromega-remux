@@ -13,17 +13,17 @@ Item {
 
         let time = Math.floor((now - DateEarned) / 1000);
         if (time < 60) {
-            return 'Played ' + time + ' seconds ago';
+            return 'Earned ' + time + ' seconds ago';
         }
 
         time = Math.floor(time / 60);
         if (time < 60) {
-            return 'Played ' + time + ' minutes ago';
+            return 'Earned ' + time + ' minutes ago';
         }
 
         time = Math.floor(time / 60);
         if (time < 24) {
-            return 'Played ' + time + ' hours ago';
+            return 'Earned ' + time + ' hours ago';
         }
 
         time = Math.floor(time / 24);
