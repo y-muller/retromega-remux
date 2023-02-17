@@ -7,6 +7,10 @@ Item {
     property var blurSource;
     property alias textInput: textInput;
 
+    property var displayNote: {
+        return (textInputNote !== '');
+    }
+
     // background to lighten or darken the blur effect, since it's translucent
     Rectangle {
         color: theme.current.bgColor;
@@ -31,14 +35,14 @@ Item {
 
     Rectangle {
         radius: 10;
-        height: parent.height * .4;
+        height: parent.height * (displayNote ? 0.43 : 0.38);
         width: parent.width * .7;
         color: theme.current.bgColor;
         border.color: theme.current.dividerColor;
 
         anchors {
             top: parent.top;
-            topMargin: root.height * .06;
+            topMargin: root.height * (displayNote ? .03 : .06);
             horizontalCenter: parent.horizontalCenter;
         }
 
@@ -78,6 +82,31 @@ Item {
             }
         }
 
+        Text {
+            id: modalNote;
+
+            text: textInputNote;
+            height: root.height * (displayNote ? .05 : 0);
+            verticalAlignment: Text.AlignVCenter;
+            wrapMode: Text.WordWrap;
+            //color: theme.current.defaultHeaderNameColor
+
+            font {
+                pixelSize: height * .49;
+                //letterSpacing: -0.3;
+                bold: false;
+            }
+
+            anchors {
+                top: modalDividerTop.top;
+                topMargin: displayNote ? 20 : 0;
+                left: parent.left;
+                leftMargin: 27;
+                right: parent.right;
+                rightMargin: 27;
+            }
+        }
+
         Rectangle {
             id: textBox;
 
@@ -85,7 +114,7 @@ Item {
             color: theme.current.textInputBackgroundColor;
 
             anchors {
-                top: modalDividerTop.bottom;
+                top: modalNote.bottom;
                 topMargin: 20;
                 left: parent.left;
                 leftMargin: 27;

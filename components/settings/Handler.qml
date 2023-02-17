@@ -146,4 +146,8 @@ Item {
         'raUserName': 'RetroAchievements User Name',
         'raApiKey': 'RetroAchievements API Key',
     }
+
+    property var notes: {
+        'raApiKey': 'Copy your API key from the RetroAchievements website in My Pages > Setttings. This is NOT your password.',
+    }
 }

@@ -63,6 +63,7 @@ Item {
         else if (typeof currentValue === 'string') {
             textInputTitle = settings.titles[currentKey];
             textInputValue = currentValue;
+            textInputNote = settings.notes[currentKey] || '';
             showModal();
         }
         if (!muteSound) sounds.nav();
