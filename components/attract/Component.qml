@@ -2,11 +2,20 @@ import QtQuick 2.15
 import QtMultimedia 5.9
 import SortFilterProxyModel 0.2
 
-Item {
+Flickable {
     property bool showTitle: true;
     property var currentAttractGame;
 
     anchors.fill: parent;
+
+    flickableDirection: Flickable.VerticalFlick
+    onFlickStarted: {
+        if (verticalVelocity > 0) {
+            onCancelPressed();
+        }
+    }
+    boundsMovement: Flickable.StopAtBounds
+    pressDelay: 0
 
     function quietAttractCallback(enabled) {
         if (enabled) attractPlayer.volume = 0;
