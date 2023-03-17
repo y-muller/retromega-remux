@@ -79,6 +79,6 @@ Most things are interactable in the header and footer. Try tapping on them!
 |controller|touch|action|
 |----------|-----|------|
 |`any dpad or y button`| |next video|
-|`A button`| |launch game|
+|`A button`|`long press`|launch game|
 |`B button`|`swipe down`|back to collection view|
-|`X button`| |toggle video title|
+|`X button`|`tap`|toggle video title|

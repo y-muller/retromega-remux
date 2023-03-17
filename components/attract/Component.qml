@@ -91,6 +91,13 @@ Flickable {
         }
     }
 
+    TapHandler {
+        id: tapHandler
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: onDetailsPressed();
+        onLongPressed: onAcceptPressed();
+    }
+
     SortFilterProxyModel {
         id: attractGames;
 
