@@ -80,5 +80,5 @@ Most things are interactable in the header and footer. Try tapping on them!
 |----------|-----|------|
 |`any dpad or y button`| |next video|
 |`A button`| |launch game|
-|`B button`|`swipe up`|back to collection view|
+|`B button`|`swipe down`|back to collection view|
 |`X button`| |toggle video title|
